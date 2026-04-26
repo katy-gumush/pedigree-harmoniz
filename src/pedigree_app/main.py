@@ -6,10 +6,17 @@ import os
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Request
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
+from pedigree_app.datasets import (
+    COOKIE_NAME,
+    DATASET_OPTIONS,
+    dataset_keys,
+    dogs_for_cookie,
+    selected_key_from_cookie,
+)
 from pedigree_app.load_csv import Dog, load_dogs
 from pedigree_app.pedigree import (
     MAX_GENERATIONS,
@@ -21,23 +28,35 @@ from pedigree_app.pedigree import (
 )
 
 # ---------------------------------------------------------------------------
-# Startup – load dataset once at import time so all handlers share it.
-# Override via PEDIGREE_CSV_PATH environment variable for corrupted-data tests.
-# ---------------------------------------------------------------------------
-
-_DEFAULT_CSV = Path(__file__).parent.parent.parent / "Dogs Pedigree.csv"
-_CSV_PATH = Path(os.environ.get("PEDIGREE_CSV_PATH", _DEFAULT_CSV))
-
-DOGS: dict[int, Dog] = load_dogs(_CSV_PATH)
-
-# ---------------------------------------------------------------------------
-# App setup
+# Optional: single CSV at import (PEDIGREE_CSV_PATH) for tests / simple deploy.
+# When unset, the app uses datasets.dogs_for_request (cookie: full + fixtures).
 # ---------------------------------------------------------------------------
 
 _THIS_DIR = Path(__file__).parent
+_SINGLE_CSV = os.environ.get("PEDIGREE_CSV_PATH")
+if _SINGLE_CSV:
+    _STATIC_DOGS: dict[int, Dog] | None = load_dogs(Path(_SINGLE_CSV))
+else:
+    _STATIC_DOGS = None
+
 app = FastAPI(title="Pedigree Explorer")
 app.mount("/static", StaticFiles(directory=_THIS_DIR / "static"), name="static")
 templates = Jinja2Templates(directory=_THIS_DIR / "templates")
+
+
+def _dogs(request: Request) -> dict[int, Dog]:
+    if _STATIC_DOGS is not None:
+        return _STATIC_DOGS
+    return dogs_for_cookie(request.cookies.get(COOKIE_NAME))
+
+
+def _nav(request: Request) -> dict:
+    return {
+        "dataset_options": DATASET_OPTIONS,
+        "current_dataset": selected_key_from_cookie(request.cookies.get(COOKIE_NAME)),
+        "dataset_picker_enabled": _STATIC_DOGS is None,
+    }
+
 
 # ---------------------------------------------------------------------------
 # REST API
@@ -45,15 +64,17 @@ templates = Jinja2Templates(directory=_THIS_DIR / "templates")
 
 
 @app.get("/api/dogs", tags=["api"])
-def list_dogs():
+def list_dogs(request: Request):
     """Return all dogs as a list of plain dicts."""
-    return [_dog_dict(d) for d in sorted(DOGS.values(), key=lambda d: d.id)]
+    dogs = _dogs(request)
+    return [_dog_dict(d) for d in sorted(dogs.values(), key=lambda d: d.id)]
 
 
 @app.get("/api/dogs/{dog_id}", tags=["api"])
-def get_dog(dog_id: int):
+def get_dog(request: Request, dog_id: int):
     """Return a single dog by id."""
-    dog = DOGS.get(dog_id)
+    dogs = _dogs(request)
+    dog = dogs.get(dog_id)
     if dog is None:
         raise HTTPException(status_code=404, detail=f"Dog {dog_id} not found")
     return _dog_dict(dog)
@@ -61,6 +82,7 @@ def get_dog(dog_id: int):
 
 @app.get("/api/dogs/{dog_id}/pedigree-network", tags=["api"])
 def get_pedigree_network_api(
+    request: Request,
     dog_id: int,
     ancestors: int = MAX_GENERATIONS,
     descendants: int = MAX_GENERATIONS,
@@ -70,29 +92,61 @@ def get_pedigree_network_api(
     *ancestors* / *descendants* cap how many generations up or down to include
     (defaults match the full pedigree view).
     """
-    if dog_id not in DOGS:
+    dogs = _dogs(request)
+    if dog_id not in dogs:
         raise HTTPException(status_code=404, detail=f"Dog {dog_id} not found")
     anc = max(0, min(ancestors, MAX_GENERATIONS))
     desc = max(0, min(descendants, MAX_GENERATIONS))
-    net = build_pedigree_network(dog_id, DOGS, anc, desc)
+    net = build_pedigree_network(dog_id, dogs, anc, desc)
     return _pedigree_network_dict(net)
 
 
 @app.get("/api/dogs/{dog_id}/pedigree", tags=["api"])
-def get_pedigree(dog_id: int):
+def get_pedigree(request: Request, dog_id: int):
     """Return ancestors and descendants up to 5 generations.
 
     Nodes are deduplicated: each dog_id appears at most once across the full
     ancestor list and at most once across the full descendant list.
     """
-    if dog_id not in DOGS:
+    dogs = _dogs(request)
+    if dog_id not in dogs:
         raise HTTPException(status_code=404, detail=f"Dog {dog_id} not found")
-    result = build_pedigree(dog_id, DOGS)
+    result = build_pedigree(dog_id, dogs)
     return {
         "root": _dog_dict(result.root),
         "ancestors": [_node_dict(n) for n in result.ancestors],
         "descendants": [_node_dict(n) for n in result.descendants],
     }
+
+
+# ---------------------------------------------------------------------------
+# Dataset switcher (HTML only; no-op when PEDIGREE_CSV_PATH locks a single file)
+# ---------------------------------------------------------------------------
+
+
+@app.post("/dataset", response_class=RedirectResponse)
+async def set_dataset(request: Request):
+    """Set the pedigree_dataset cookie and redirect back (Referer or home)."""
+    if _STATIC_DOGS is not None:
+        return RedirectResponse(url="/", status_code=303)
+    form = await request.form()
+    raw = form.get("dataset")
+    key = str(raw).strip() if raw is not None else ""
+    if key not in dataset_keys():
+        raise HTTPException(status_code=400, detail="Unknown dataset")
+    base = str(request.base_url).rstrip("/")
+    referer = request.headers.get("referer") or ""
+    dest = referer if referer.startswith(base) else "/"
+    response = RedirectResponse(url=dest, status_code=303)
+    response.set_cookie(
+        COOKIE_NAME,
+        key,
+        max_age=60 * 60 * 24 * 365,
+        httponly=True,
+        samesite="lax",
+        path="/",
+    )
+    return response
 
 
 # ---------------------------------------------------------------------------
@@ -102,61 +156,61 @@ def get_pedigree(dog_id: int):
 
 @app.get("/", response_class=HTMLResponse)
 def dogs_list(request: Request):
-    dogs = sorted(DOGS.values(), key=lambda d: d.id)
-    return templates.TemplateResponse(request, "dogs_list.html", {"dogs": dogs})
+    dogs = sorted(_dogs(request).values(), key=lambda d: d.id)
+    ctx = {"dogs": dogs, **_nav(request)}
+    return templates.TemplateResponse(request, "dogs_list.html", ctx)
 
 
 @app.get("/dogs/{dog_id}", response_class=HTMLResponse)
 def dog_card(request: Request, dog_id: int):
-    dog = DOGS.get(dog_id)
+    dogs = _dogs(request)
+    dog = dogs.get(dog_id)
     if dog is None:
         return templates.TemplateResponse(
             request,
             "error.html",
-            {"message": f"Dog with id {dog_id} was not found."},
+            {"message": f"Dog with id {dog_id} was not found.", **_nav(request)},
             status_code=404,
         )
-    sire = DOGS.get(dog.sire_id) if dog.sire_id else None
-    dam = DOGS.get(dog.dam_id) if dog.dam_id else None
-    return templates.TemplateResponse(
-        request, "dog_card.html", {"dog": dog, "sire": sire, "dam": dam}
-    )
+    sire = dogs.get(dog.sire_id) if dog.sire_id else None
+    dam = dogs.get(dog.dam_id) if dog.dam_id else None
+    ctx = {"dog": dog, "sire": sire, "dam": dam, **_nav(request)}
+    return templates.TemplateResponse(request, "dog_card.html", ctx)
 
 
 @app.get("/dogs/{dog_id}/pedigree", response_class=HTMLResponse)
 def dog_pedigree(request: Request, dog_id: int):
-    dog = DOGS.get(dog_id)
+    dogs = _dogs(request)
+    dog = dogs.get(dog_id)
     if dog is None:
         return templates.TemplateResponse(
             request,
             "error.html",
-            {"message": f"Dog with id {dog_id} was not found."},
+            {"message": f"Dog with id {dog_id} was not found.", **_nav(request)},
             status_code=404,
         )
-    max_anc, max_desc = initial_tree_depths(dog_id, DOGS)
+    max_anc, max_desc = initial_tree_depths(dog_id, dogs)
     result = build_pedigree(
-        dog_id, DOGS, max_ancestors=max_anc, max_descendants=max_desc
+        dog_id, dogs, max_ancestors=max_anc, max_descendants=max_desc
     )
-    net = build_pedigree_network(dog_id, DOGS, max_anc, max_desc)
+    net = build_pedigree_network(dog_id, dogs, max_anc, max_desc)
     anc_depth = {n.dog.id: n.depth for n in result.ancestors}
     desc_depth = {n.dog.id: n.depth for n in result.descendants}
     pedigree_graph = _pedigree_network_dict(net, anc_depth, desc_depth)
     pedigree_graph["page_root_id"] = dog_id
     pedigree_graph["initial_max_ancestors"] = max_anc
     pedigree_graph["initial_max_descendants"] = max_desc
-    return templates.TemplateResponse(
-        request,
-        "dog_pedigree.html",
-        {
-            "dog": dog,
-            "ancestors": result.ancestors,
-            "descendants": result.descendants,
-            "max_gen_anc": max_anc,
-            "max_gen_desc": max_desc,
-            "full_pedigree_depth": MAX_GENERATIONS,
-            "pedigree_graph": pedigree_graph,
-        },
-    )
+    ctx = {
+        "dog": dog,
+        "ancestors": result.ancestors,
+        "descendants": result.descendants,
+        "max_gen_anc": max_anc,
+        "max_gen_desc": max_desc,
+        "full_pedigree_depth": MAX_GENERATIONS,
+        "pedigree_graph": pedigree_graph,
+        **_nav(request),
+    }
+    return templates.TemplateResponse(request, "dog_pedigree.html", ctx)
 
 
 # ---------------------------------------------------------------------------

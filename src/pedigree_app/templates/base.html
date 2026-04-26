@@ -9,8 +9,20 @@
 </head>
 <body>
   <nav class="navbar navbar-dark bg-dark mb-4">
-    <div class="container">
-      <a class="navbar-brand fw-bold" href="/">🐾 Pedigree Explorer</a>
+    <div class="container d-flex flex-wrap align-items-center gap-2">
+      <a class="navbar-brand fw-bold mb-0" href="/">🐾 Pedigree Explorer</a>
+      {% if dataset_picker_enabled %}
+      <form method="post" action="/dataset" class="d-flex align-items-center gap-2 ms-lg-auto ms-0 flex-grow-1 flex-lg-grow-0" style="min-width: 0;">
+        <label for="dataset-select" class="text-light small text-nowrap mb-0">Data source</label>
+        <select name="dataset" id="dataset-select" data-testid="dataset-select"
+                class="form-select form-select-sm bg-dark text-light border-secondary"
+                style="max-width: 22rem;" aria-label="Data source" onchange="this.form.submit()">
+          {% for opt in dataset_options %}
+          <option value="{{ opt.key }}" {% if opt.key == current_dataset %}selected{% endif %}>{{ opt.label }}</option>
+          {% endfor %}
+        </select>
+      </form>
+      {% endif %}
     </div>
   </nav>
   <main class="container pb-5">

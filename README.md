@@ -15,14 +15,14 @@ pedigree/
     templates/                   HTML pages with data-testid attributes
     static/                      CSS
   scripts/
-    generate_corrupted_datasets.py   produces test fixtures
+    generate_corrupted_datasets.py   writes minimal CSV fixtures (few rows each)
   java-tests/
     pom.xml                      Maven project (JUnit 5 + Commons CSV + REST Assured + Playwright)
     src/test/java/com/pedigree/
       data/PedigreeCsvIntegrityTest.java    data-layer tests
       api/PedigreeApiTest.java              API-layer tests
       ui/PedigreeUiTest.java                UI-layer Playwright tests
-    src/test/resources/fixtures/   clean + corrupted CSV fixtures (generated)
+    src/test/resources/fixtures/   clean + corrupted minimal CSV fixtures (generated)
   TESTING.md                     test strategy and error scenario explanations
 ```
 
@@ -50,7 +50,7 @@ uv pip install -e .              # installs fastapi, uvicorn, jinja2, etc.
 .venv/bin/python scripts/generate_corrupted_datasets.py
 ```
 
-This writes `clean.csv` plus four corrupted variants into `java-tests/src/test/resources/fixtures/`.
+This writes `clean.csv` plus four small corrupted variants into `java-tests/src/test/resources/fixtures/` (each file is only a handful of rows, one issue per corrupt file).
 
 ### 3 — Start the application
 
@@ -60,10 +60,12 @@ PYTHONPATH=src .venv/bin/uvicorn pedigree_app.main:app --reload
 
 The app listens on `http://127.0.0.1:8000` by default.
 
-To run against a corrupted dataset (for manual inspection or API error scenario tests):
+**Switching data in the UI:** With no `PEDIGREE_CSV_PATH`, the navbar **Data source** dropdown loads the full `Dogs Pedigree.csv` or any minimal fixture (clean, bad parent, duplicate id, cycles). The choice applies to both HTML pages and `/api/*` on the same origin (cookie-backed).
+
+To lock the server to a single CSV (CI, API/UI tests against the full file, or no picker):
 
 ```bash
-PEDIGREE_CSV_PATH=/path/to/corrupt_bad_parent_id.csv \
+PEDIGREE_CSV_PATH=/absolute/path/to/Dogs\ Pedigree.csv \
   PYTHONPATH=src .venv/bin/uvicorn pedigree_app.main:app
 ```
 
@@ -125,5 +127,6 @@ mvn test -Dbase.url=http://127.0.0.1:9000
 | GET | `/api/dogs` | JSON list of all dogs |
 | GET | `/api/dogs/{id}` | JSON single dog |
 | GET | `/api/dogs/{id}/pedigree` | JSON ancestors + descendants, depth ≤ 5 |
+| POST | `/dataset` | Form field `dataset` = registry key; sets cookie and redirects (HTML navbar picker) |
 
 Interactive API docs: `http://127.0.0.1:8000/docs`

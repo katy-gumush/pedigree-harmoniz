@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.pedigree.data.PedigreeCsvIntegrityTest
 -------------------------------------------------------------------------------
-Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.028 s -- in com.pedigree.data.PedigreeCsvIntegrityTest
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.038 s -- in com.pedigree.data.PedigreeCsvIntegrityTest

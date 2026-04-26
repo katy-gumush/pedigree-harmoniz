@@ -20,8 +20,9 @@ import static org.junit.jupiter.api.Assertions.*;
  * no self-parenting, no directed cycle in parent links (any length, DFS),
  * and non-negative measurements.
  *
- * <p>Fixtures under {@code /fixtures/} are produced by {@code scripts/generate_corrupted_datasets.py}:
- * clean, bad parent id, duplicate id, immediate two-node cycle, and a three-node cycle.
+ * <p>Fixtures under {@code /fixtures/} are small CSVs (few rows each) produced by
+ * {@code scripts/generate_corrupted_datasets.py}: clean, bad parent id, duplicate id,
+ * immediate two-node cycle, and a three-node sire-only cycle.
  */
 @Tag("data")
 class PedigreeCsvIntegrityTest {
@@ -62,7 +63,7 @@ class PedigreeCsvIntegrityTest {
     }
 
     @Test
-    @DisplayName("corrupt_immediate_loop.csv fails directed cycle check (dog 1 and 51 mutual parents)")
+    @DisplayName("corrupt_immediate_loop.csv fails directed cycle check (two-dog mutual parent links)")
     void immediateLoopFailsDirectedCycleCheck() {
         List<CSVRecord> rows = loadCsv("corrupt_immediate_loop.csv");
         assertRequiredFields(rows, true);
@@ -72,7 +73,7 @@ class PedigreeCsvIntegrityTest {
     }
 
     @Test
-    @DisplayName("corrupt_long_cycle.csv fails directed cycle check (3-node sire-only loop 4→5→6→4)")
+    @DisplayName("corrupt_long_cycle.csv fails directed cycle check (3-node sire-only loop)")
     void longCycleFailsDirectedCycleCheck() {
         List<CSVRecord> rows = loadCsv("corrupt_long_cycle.csv");
         assertRequiredFields(rows, true);
