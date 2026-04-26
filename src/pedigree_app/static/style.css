@@ -1,0 +1,70 @@
+body {
+  background-color: #f8f9fa;
+}
+
+.navbar-brand {
+  letter-spacing: 0.02em;
+}
+
+.table th {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+[data-testid="pedigree-root"] {
+  font-weight: 700;
+}
+
+.badge.bg-info {
+  font-variant-numeric: tabular-nums;
+}
+
+.pedigree-tree-card {
+  border: 1px solid #dee2e6;
+}
+
+.pedigree-tree-wrap {
+  overflow-x: auto;
+  min-height: 120px;
+}
+
+.pedigree-tree-svg {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+}
+
+.pedigree-edge {
+  stroke: #6c757d;
+  stroke-width: 2;
+}
+
+.pedigree-edge-hit {
+  cursor: pointer;
+  pointer-events: stroke;
+}
+
+.pedigree-node {
+  fill: #fff;
+  stroke: #adb5bd;
+  stroke-width: 1.5;
+}
+
+.pedigree-node-focus {
+  fill: #e7f1ff;
+  stroke: #0d6efd;
+  stroke-width: 2;
+}
+
+.pedigree-node-label {
+  fill: #212529;
+  font-size: 12px;
+  font-weight: 500;
+  pointer-events: none;
+}
+
+.pedigree-tree-svg a {
+  pointer-events: all;
+}

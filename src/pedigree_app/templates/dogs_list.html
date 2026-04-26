@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Dogs – Pedigree Explorer{% endblock %}
+{% block content %}
+<h1 class="h3 mb-3">All Dogs <span class="badge bg-secondary">{{ dogs|length }}</span></h1>
+
+<div class="mb-3">
+  <input type="text" id="search-input" class="form-control" placeholder="Filter by name, breed, or id…">
+</div>
+
+<div class="table-responsive">
+  <table class="table table-hover align-middle" data-testid="dog-table">
+    <thead class="table-dark">
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Breed</th>
+        <th>Sex</th>
+        <th>Height (cm)</th>
+        <th>Weight (kg)</th>
+        <th>Sire</th>
+        <th>Dam</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="dog-tbody">
+      {% for dog in dogs %}
+      <tr data-testid="dog-row-{{ dog.id }}">
+        <td>{{ dog.id }}</td>
+        <td>{{ dog.name }}</td>
+        <td>{{ dog.breed }}</td>
+        <td>{{ dog.sex }}</td>
+        <td>{{ dog.height_cm }}</td>
+        <td>{{ dog.weight_kg }}</td>
+        <td>{% if dog.sire_id %}<a href="/dogs/{{ dog.sire_id }}">#{{ dog.sire_id }}</a>{% else %}—{% endif %}</td>
+        <td>{% if dog.dam_id %}<a href="/dogs/{{ dog.dam_id }}">#{{ dog.dam_id }}</a>{% else %}—{% endif %}</td>
+        <td>
+          <a href="/dogs/{{ dog.id }}" class="btn btn-sm btn-outline-primary" data-testid="dog-link-{{ dog.id }}">View</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<script>
+  document.getElementById('search-input').addEventListener('input', function () {
+    const query = this.value.toLowerCase();
+    document.querySelectorAll('#dog-tbody tr').forEach(row => {
+      row.style.display = row.textContent.toLowerCase().includes(query) ? '' : 'none';
+    });
+  });
+</script>
+{% endblock %}

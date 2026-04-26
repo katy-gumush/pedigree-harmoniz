@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Pedigree of {{ dog.name }} – Pedigree Explorer{% endblock %}
+{% block content %}
+<nav aria-label="breadcrumb" class="mb-3">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/">Dogs</a></li>
+    <li class="breadcrumb-item"><a href="/dogs/{{ dog.id }}">{{ dog.name }} #{{ dog.id }}</a></li>
+    <li class="breadcrumb-item active">Pedigree</li>
+  </ol>
+</nav>
+
+<h1 class="h4 mb-2">
+  Pedigree of
+  <span data-testid="pedigree-root" data-dog-id="{{ dog.id }}">{{ dog.name }} (#{{ dog.id }})</span>
+  <small class="text-muted fs-6">— {{ dog.breed }}</small>
+</h1>
+<p class="text-muted small mb-3">
+  Tree shows up to <strong>{{ max_gen_anc }}</strong> generations above and <strong>{{ max_gen_desc }}</strong> below this dog.
+  {% if max_gen_anc == 2 and max_gen_desc == 2 %}
+  <span class="d-block mt-1">Shallow view: no recorded parents and no listed offspring.</span>
+  {% elif max_gen_anc == full_pedigree_depth and max_gen_desc == 2 %}
+  <span class="d-block mt-1">Descendants are limited to 2 generations because this dog has many direct children in the dataset.</span>
+  {% endif %}
+  Click a <strong>line</strong> between parent and child to zoom that neighborhood to ±2 generations around the child (when data exists).
+</p>
+
+<div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+  <button type="button" class="btn btn-outline-secondary btn-sm" id="pedigree-tree-reset" hidden>Reset full tree</button>
+  <span class="text-muted small" id="pedigree-tree-status" role="status"></span>
+</div>
+
+{% if not ancestors %}
+<p class="text-muted small mb-2" data-testid="pedigree-no-ancestors">No ancestor records found.</p>
+{% endif %}
+{% if not descendants %}
+<p class="text-muted small mb-2" data-testid="pedigree-no-descendants">No descendant records found.</p>
+{% endif %}
+
+<div class="card pedigree-tree-card">
+  <div class="card-body p-2 p-md-3">
+    <div id="pedigree-tree-mount" class="pedigree-tree-wrap"></div>
+  </div>
+</div>
+
+<script type="application/json" id="pedigree-bootstrap">{{ pedigree_graph | tojson }}</script>
+{% endblock %}
+{% block scripts %}
+<script src="/static/pedigree_tree.js" defer></script>
+{% endblock %}

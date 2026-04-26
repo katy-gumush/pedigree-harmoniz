@@ -1,0 +1,583 @@
+ID,Name,Breed,Sex,Height_cm,Weight_kg,Sire_ID,Dam_ID
+1,Max,Labrador Retriever,Male,58.4,31.6,,
+2,Lucy,French Bulldog,Female,28.9,11.5,,
+3,Maggie,Boxer,Male,59.3,31.3,,
+4,Gracie,Labrador Retriever,Female,59.3,29.1,,
+5,Riley,French Bulldog,Male,29.3,12.7,,
+6,Gus,Boxer,Female,54.7,25.7,,
+7,Rosie,French Bulldog,Male,30.4,9.7,,
+8,Molly,Dachshund,Female,18.3,7.6,,
+9,Duke,Labrador Retriever,Male,54.1,33,,
+10,Moose,Golden Retriever,Female,53.5,23.2,,
+11,Pepper,Rottweiler,Male,70.8,48.9,,
+12,Jack,Poodle,Female,43.1,15.4,,
+13,Bailey,French Bulldog,Male,29.2,12.1,,
+14,Moose,Beagle,Female,33.9,10.4,,
+15,Cooper,German Shepherd,Male,63,33,,
+16,Ruby,German Shepherd,Female,58.2,33.2,,
+17,Roxy,Beagle,Male,38,10.7,,
+18,Gracie,Poodle,Female,44.8,15.8,,
+19,Max,Yorkshire Terrier,Male,20.2,2.4,,
+20,Penny,German Shepherd,Female,56,28.6,,
+21,Ruby,German Shepherd,Male,67.4,34.6,,
+22,Riley,Poodle,Female,42.8,17.5,,
+23,Willow,Dachshund,Male,20.4,8.4,,
+24,Oliver,Dachshund,Female,19.5,8.8,,
+25,Lola,German Shepherd,Male,66.1,28,,
+26,Max,French Bulldog,Female,28.5,9.6,,
+27,Shadow,Poodle,Male,43.5,23.3,,
+28,Lucy,French Bulldog,Female,29.4,10.9,,
+29,Cooper,Rottweiler,Male,63.2,48.5,,
+30,Duke,Yorkshire Terrier,Female,18.3,2.7,,
+31,Willow,Beagle,Male,37.1,11.8,,
+32,Buddy,Beagle,Female,34,8.8,,
+33,Roxy,French Bulldog,Male,31.2,13.6,,
+34,Lilly,Poodle,Female,42.8,19.8,,
+35,Pepper,German Shepherd,Male,66.2,31.8,,
+36,Gracie,Golden Retriever,Female,57,31.2,,
+37,Penny,French Bulldog,Male,29.9,13.9,,
+38,Buddy,Yorkshire Terrier,Female,15.6,2.7,,
+39,Ruby,Poodle,Male,45.2,21.3,,
+40,Willow,Boxer,Female,56.3,21.6,,
+41,Maggie,Beagle,Male,37.6,12.4,,
+42,Shadow,Labrador Retriever,Female,59.1,25.6,,
+43,Maggie,Labrador Retriever,Male,54.7,30.4,,
+44,Chloe,Rottweiler,Female,62.7,41.3,,
+45,Duke,German Shepherd,Male,63.3,35.7,,
+46,Toby,Dachshund,Female,20.1,8.8,,
+47,Gus,Beagle,Male,36.7,11.6,,
+48,Toby,Yorkshire Terrier,Female,17.6,2.1,,
+49,Zeus,Yorkshire Terrier,Male,20.3,3.1,,
+50,Bailey,Poodle,Female,43,17.6,,
+51,Henry,Labrador Retriever x French Bulldog,Female,44.2,21.4,1,2
+52,Oliver,Labrador Retriever x French Bulldog,Male,43.9,19.4,1,2
+53,Nala,Boxer x Labrador Retriever,Female,55.9,30.2,3,4
+54,Daisy,Rottweiler x Labrador Retriever,Male,65.2,43.8,11,4
+55,Gracie,Boxer x Labrador Retriever,Male,59,30.7,3,4
+56,Finn,Boxer x Labrador Retriever,Female,59.2,28.4,3,4
+57,Murphy,French Bulldog x Boxer,Male,41,20.5,5,6
+58,Shadow,French Bulldog x Boxer,Female,43.8,20.5,5,6
+59,Buddy,French Bulldog x Boxer,Female,40.9,19.3,5,6
+60,Nala,French Bulldog x Boxer,Male,41.4,20.1,5,6
+61,Willow,French Bulldog x Dachshund,Female,25.6,9,7,8
+62,Bailey,Labrador Retriever x Golden Retriever,Female,51.3,28.2,9,10
+63,Gracie,Rottweiler x Poodle,Female,58,31.9,11,12
+64,Oliver,Rottweiler x Poodle,Female,56.3,30.7,11,12
+65,Coco,French Bulldog x Beagle,Male,32.5,11.5,13,14
+66,Rocky,Beagle,Male,37,12.5,31,14
+67,Riley,Beagle,Male,35.2,11,31,14
+68,Toby,German Shepherd,Male,61.5,33.6,15,16
+69,Lilly,German Shepherd,Female,61.1,33.7,15,16
+70,Daisy,German Shepherd,Male,59.4,33.5,15,16
+71,Charlie,German Shepherd,Male,61.1,31.9,15,16
+72,Rocky,Beagle x Poodle,Male,41.6,12.4,17,18
+73,Jack,Yorkshire Terrier x German Shepherd,Male,37.2,14.6,19,20
+74,Lilly,Yorkshire Terrier x German Shepherd,Female,39,16.5,19,20
+75,Winnie,Yorkshire Terrier x German Shepherd,Female,38.6,16.2,19,20
+76,Rosie,German Shepherd x Poodle,Male,52.8,25,21,22
+77,Bentley,French Bulldog x Dachshund,Female,24.7,12.2,37,24
+78,Winnie,Dachshund,Male,19.8,9.8,23,24
+79,Luna,Dachshund,Female,20.3,8.2,23,24
+80,Bear,Dachshund,Male,19.3,8.8,23,24
+81,Milo,Beagle x French Bulldog,Female,32.7,11.1,31,26
+82,Bear,Beagle x French Bulldog,Male,32.4,11.1,31,26
+83,Luna,German Shepherd x French Bulldog,Male,48.8,18.5,25,26
+84,Buddy,German Shepherd x French Bulldog,Female,46,18.3,25,26
+85,Zeus,Poodle x French Bulldog,Male,36.5,16.1,27,28
+86,Ruby,Poodle x French Bulldog,Female,36.8,17.6,27,28
+87,Zoe,Poodle x French Bulldog,Female,37.6,18,27,28
+88,Bailey,Poodle x French Bulldog,Male,34.9,16.3,27,28
+89,Jax,Rottweiler x Yorkshire Terrier,Male,41.9,26.4,29,30
+90,Luna,Rottweiler x Yorkshire Terrier,Female,40.4,26.6,29,30
+91,Luna,Rottweiler x Yorkshire Terrier,Male,39.8,25.3,29,30
+92,Gracie,Rottweiler x Yorkshire Terrier,Male,40.2,25.7,29,30
+93,Zeus,Beagle,Male,35.1,10.3,31,32
+94,Jax,Beagle,Male,34.6,10.1,31,32
+95,Lilly,French Bulldog x Poodle,Female,39.7,18.2,33,34
+96,Lilly,French Bulldog x Poodle,Female,38.5,17.4,33,34
+97,Milo,French Bulldog x Poodle,Female,37,17.1,33,34
+98,Bella,German Shepherd x Golden Retriever,Female,60.1,31.3,35,36
+99,Rocky,German Shepherd x Golden Retriever,Male,62.5,32.9,35,36
+100,Roxy,French Bulldog x Yorkshire Terrier,Male,22.4,8,37,38
+101,Zoe,Poodle x Boxer,Male,54,22.6,39,40
+102,Oscar,Poodle x Boxer,Male,48.4,20.9,39,40
+103,Lilly,Poodle x Boxer,Male,52.7,20.7,39,40
+104,Stella,Beagle x Labrador Retriever,Male,48,20.8,41,42
+105,Duke,Labrador Retriever x Rottweiler,Female,56.4,35.7,43,44
+106,Toby,German Shepherd x Dachshund,Female,41.5,21.7,45,46
+107,Luna,German Shepherd x Dachshund,Male,41.8,24.9,45,46
+108,Max,German Shepherd x Dachshund,Male,42.2,23.3,45,46
+109,Willow,Beagle x Yorkshire Terrier,Female,27,6.9,47,48
+110,Riley,Yorkshire Terrier x Poodle,Female,33.7,9.3,49,50
+111,Rocky,Yorkshire Terrier x Poodle,Male,31.5,10.7,49,50
+112,Jax,Yorkshire Terrier x Poodle,Male,31.9,10,49,50
+113,Harley,Yorkshire Terrier x Poodle,Female,31.5,10.1,49,50
+114,Roxy,Mixed,Male,50.4,27.6,1,51
+115,Cooper,Boxer x Labrador Retriever,Female,58.1,31.3,55,53
+116,Oscar,Mixed,Male,59.4,38.6,54,53
+117,Buddy,Mixed,Male,61.5,29,3,56
+118,Sadie,Mixed,Female,60.2,29.5,3,56
+119,Lilly,Mixed,Male,61.8,38.1,54,56
+120,Cooper,Boxer x Labrador Retriever,Female,60.6,30.8,55,56
+121,Maggie,French Bulldog x Boxer,Male,41.7,21.5,57,58
+122,Roxy,French Bulldog x Boxer,Female,42.1,21.4,57,58
+123,Maggie,Mixed,Male,35.4,15.9,5,59
+124,Jack,Mixed,Female,29,8.8,7,61
+125,Roxy,Mixed,Female,28.6,9.7,7,61
+126,Charlie,Mixed,Male,27.4,9.3,7,61
+127,Sadie,Mixed,Female,26.2,10.2,7,61
+128,Roxy,Mixed,Female,53.4,29.7,9,62
+129,Ruby,Mixed,Male,51.4,31,9,62
+130,Bella,Mixed,Male,63.5,40.9,11,63
+131,Lilly,Mixed,Female,65.8,38.9,11,64
+132,Winnie,Mixed,Female,62.3,42.5,11,64
+133,Chloe,German Shepherd,Female,57.4,35.4,71,69
+134,Lola,Mixed,Female,29.6,9.3,19,74
+135,Murphy,Yorkshire Terrier x German Shepherd,Male,38.5,14.9,73,74
+136,Zeus,Yorkshire Terrier x German Shepherd,Male,37.5,15.8,73,75
+137,Bentley,Mixed,Female,29.5,9.8,19,75
+138,Murphy,Yorkshire Terrier x German Shepherd,Male,38.4,15.4,73,75
+139,Lilly,Mixed,Male,31.4,9.5,19,75
+140,Willow,Mixed,Female,21.9,11,80,77
+141,Murphy,Mixed,Female,40,22.3,55,77
+142,Bailey,Mixed,Male,22.4,9.6,23,77
+143,Oscar,Mixed,Male,40.6,15.8,101,77
+144,Coco,Dachshund,Male,20,9.3,80,79
+145,Diesel,Beagle x French Bulldog,Female,31.3,12.1,82,81
+146,Pepper,Mixed,Male,42.2,14.5,83,81
+147,Shadow,Mixed,Female,46.9,20.9,25,81
+148,Finn,German Shepherd x French Bulldog,Female,47.4,18.4,83,84
+149,Daisy,Mixed,Female,51.8,25.3,55,84
+150,Lilly,Mixed,Female,33.1,13.1,100,84
+151,Oscar,Mixed,Female,39.3,15.1,82,84
+152,Molly,Poodle x French Bulldog,Male,36.2,16.3,88,86
+153,Molly,Poodle x French Bulldog,Female,38.4,16.9,85,86
+154,Duke,Poodle x French Bulldog,Female,37.1,17,88,86
+155,Molly,Poodle x French Bulldog,Male,38.7,17.8,85,87
+156,Duke,Mixed,Female,40,20.3,27,87
+157,Lucy,Poodle x French Bulldog,Male,34.4,18.4,88,87
+158,Pepper,Poodle x French Bulldog,Male,38,16.9,85,87
+159,Rosie,Mixed,Female,53.3,38.2,29,90
+160,Rosie,Rottweiler x Yorkshire Terrier,Male,40.3,27.2,92,90
+161,Ruby,Rottweiler x Yorkshire Terrier,Male,40,24,92,90
+162,Ellie,Mixed,Male,35.8,15.2,33,95
+163,Moose,Mixed,Female,34.9,15.1,33,95
+164,Penny,Mixed,Male,35.4,16.7,33,95
+165,Bentley,Mixed,Female,34.4,16.3,33,95
+166,Lilly,Mixed,Female,28.7,13.1,78,96
+167,Milo,Mixed,Male,34,14.6,33,97
+168,Lucy,Mixed,Female,66.9,31.6,35,98
+169,Sadie,Mixed,Male,46.2,24.3,94,105
+170,Toby,German Shepherd x Dachshund,Female,41.5,23,107,106
+171,Duke,Mixed,Female,31.6,8.2,47,109
+172,Ellie,Mixed,Male,30.4,9.9,47,109
+173,Roxy,Mixed,Male,33.4,9.1,47,109
+174,Max,Yorkshire Terrier x Poodle,Male,33.6,9.2,112,110
+175,Charlie,Mixed,Male,27.1,5.8,49,113
+176,Lilly,Yorkshire Terrier x Poodle,Male,30.7,9.9,111,113
+177,Leo,Mixed,Female,25.8,6.6,49,113
+178,Gracie,Mixed,Male,60.2,36.9,54,115
+179,Harley,Mixed,Male,67.2,38.5,54,118
+180,Coco,Mixed,Female,58.8,32.5,55,118
+181,Lola,Mixed,Male,60.3,32.7,119,118
+182,Bear,Mixed,Male,63.6,31.6,119,118
+183,Murphy,Boxer x Labrador Retriever,Male,58.6,30,55,120
+184,Max,Mixed,Female,60,28.6,117,120
+185,Oliver,Mixed,Male,61.3,33,119,120
+186,Bella,Boxer x Labrador Retriever,Female,60.3,30.7,55,120
+187,Bentley,Mixed,Female,35.1,17.7,5,122
+188,Gus,Mixed,Male,26.8,9.3,126,124
+189,Oscar,Mixed,Female,27.6,9.3,126,124
+190,Chloe,Mixed,Male,27.6,8.2,126,124
+191,Duke,Mixed,Female,28.2,10.1,7,125
+192,Coco,Mixed,Female,27,9.6,126,125
+193,Chloe,Mixed,Male,26.1,9.6,126,127
+194,Stella,Mixed,Female,27.6,9.5,126,127
+195,Riley,Mixed,Male,48.5,29.1,129,128
+196,Lucy,Mixed,Male,54.7,31,9,128
+197,Riley,Mixed,Male,53,29.4,129,128
+198,Molly,Mixed,Male,65.6,43.1,130,131
+199,Zeus,Mixed,Male,65.3,41.6,54,131
+200,Ellie,Mixed,Female,63.6,40.8,130,132
+201,Roxy,Mixed,Female,63.4,46,130,132
+202,Maggie,German Shepherd,Male,57.2,30.6,70,133
+203,Daisy,German Shepherd,Male,60.2,33,70,133
+204,Duke,German Shepherd,Female,56.4,33.7,71,133
+205,Zoe,German Shepherd,Male,59,35.9,68,133
+206,Bella,Mixed,Male,34.2,12.4,135,134
+207,Riley,Mixed,Female,24.2,5.7,19,134
+208,Willow,Mixed,Female,33.9,12.7,73,134
+209,Coco,Mixed,Female,42.9,19.7,3,137
+210,Jack,Mixed,Male,35,13.1,136,137
+211,Ellie,Mixed,Male,33.6,12.9,135,137
+212,Diesel,Mixed,Male,22,9.8,142,140
+213,Luna,Mixed,Male,20.7,10.3,144,140
+214,Harley,Mixed,Male,51.4,28.1,117,141
+215,Riley,Mixed,Female,29.5,14.4,23,141
+216,Maggie,Mixed,Female,38.1,20.5,143,141
+217,Harley,Mixed,Female,36.9,15.1,146,145
+218,Oscar,Mixed,Male,48.4,20.1,25,145
+219,Willow,Mixed,Male,41.9,17.1,82,147
+220,Buddy,Mixed,Male,59.2,23.8,25,147
+221,Buddy,Mixed,Male,55.5,27.6,21,147
+222,Zoe,Mixed,Male,44.6,18.7,146,147
+223,Pepper,German Shepherd x French Bulldog,Female,49.6,17.9,83,148
+224,Stella,Mixed,Male,57.7,27.5,54,148
+225,Louie,Mixed,Male,40.2,18,82,149
+226,Rocky,Mixed,Male,40.7,18.1,82,149
+227,Gracie,Mixed,Female,44.5,18.6,73,149
+228,Pepper,Mixed,Female,36.5,14.2,146,150
+229,Nala,Mixed,Female,40,15.7,83,150
+230,Bentley,Mixed,Female,49.6,20.7,25,150
+231,Lucy,Mixed,Male,51.5,22.3,25,151
+232,Coco,Poodle x French Bulldog,Male,38.2,16.4,158,153
+233,Duke,Poodle x French Bulldog,Male,35.6,17.7,157,153
+234,Ellie,Poodle x French Bulldog,Female,38.2,14.8,85,154
+235,Jax,Poodle x French Bulldog,Female,36.4,16.2,85,154
+236,Lucy,Poodle x French Bulldog,Female,35.1,16,152,154
+237,Chloe,Mixed,Male,38,17.6,88,156
+238,Rosie,Mixed,Female,37.3,18.3,88,156
+239,Moose,Mixed,Male,46.9,31.7,92,159
+240,Stella,Mixed,Female,34.9,15.6,164,163
+241,Zeus,Mixed,Male,38.4,21.6,160,163
+242,Rosie,Mixed,Male,34.8,15.2,167,165
+243,Oscar,Mixed,Female,33.7,12.8,82,165
+244,Toby,Mixed,Female,33.7,14.8,33,165
+245,Molly,Mixed,Female,33.3,13.6,164,166
+246,Gracie,Mixed,Male,47.1,25.1,130,166
+247,Riley,Mixed,Male,66.6,32.2,99,168
+248,Maggie,Mixed,Male,65.9,33.8,35,168
+249,Louie,Mixed,Male,70.9,32.8,35,168
+250,Zoe,German Shepherd x Dachshund,Female,40.2,23.3,108,170
+251,Ellie,Mixed,Male,29.5,9.3,172,171
+252,Ruby,Mixed,Male,30,9.3,111,177
+253,Henry,Mixed,Male,25.7,6.4,175,177
+254,Shadow,Mixed,Female,28.7,8.6,112,177
+255,Duke,Mixed,Male,60.5,31.4,181,180
+256,Jax,Mixed,Female,60.5,29.6,117,180
+257,Penny,Mixed,Female,66.2,32.1,179,184
+258,Moose,Mixed,Female,61.2,28,181,184
+259,Lola,Mixed,Male,60,34.6,119,186
+260,Shadow,Mixed,Female,64.4,34.5,116,186
+261,Gus,Mixed,Female,61.8,26.3,220,186
+262,Louie,Boxer x Labrador Retriever,Male,59.4,33,183,186
+263,Milo,Mixed,Female,32.7,15.6,5,187
+264,Cooper,Mixed,Female,37.1,20.5,121,187
+265,Rosie,Mixed,Male,27.4,9.6,126,189
+266,Jack,Mixed,Female,27.3,8.7,188,189
+267,Murphy,Mixed,Female,26.2,9.7,188,191
+268,Penny,Mixed,Male,28.6,9.2,190,191
+269,Willow,Mixed,Female,28.2,9.6,126,191
+270,Bentley,Mixed,Male,30.3,9.9,7,191
+271,Molly,Mixed,Male,27.5,9.9,7,192
+272,Max,Mixed,Female,27.8,10.3,7,192
+273,Roxy,Mixed,Female,26.7,9.5,188,192
+274,Finn,Mixed,Female,28.2,9.5,126,194
+275,Buddy,Mixed,Male,26.4,9.7,126,194
+276,Oscar,Mixed,Male,28.2,8.9,190,194
+277,Maggie,Mixed,Female,65.3,41.5,130,200
+278,Stella,Mixed,Male,61.2,37.6,199,200
+279,Zoe,Mixed,Male,62.8,42.8,199,200
+280,Jax,Mixed,Female,42.6,24.2,142,200
+281,Pepper,Mixed,Female,64.3,44.3,199,201
+282,Lola,Mixed,Female,67.5,42.3,198,201
+283,Bear,German Shepherd,Female,61.5,33,15,204
+284,Zoe,German Shepherd,Female,56.7,33.2,202,204
+285,Lilly,German Shepherd,Female,55.8,35.5,205,204
+286,Gracie,Mixed,Female,21.8,3.9,19,207
+287,Shadow,Mixed,Male,30.7,10.3,138,207
+288,Maggie,Mixed,Male,27.3,8.1,139,207
+289,Willow,Mixed,Male,32.7,10,135,207
+290,Harley,Mixed,Female,27.2,7,19,208
+291,Winnie,Mixed,Male,36.5,15.2,162,208
+292,Chloe,Mixed,Female,46.8,20.4,117,208
+293,Penny,Mixed,Female,35.7,14.6,65,209
+294,Buddy,Mixed,Female,41.7,16.7,138,209
+295,Zoe,Mixed,Female,38,16.4,210,209
+296,Rocky,Mixed,Male,39.8,15.5,210,209
+297,Murphy,Mixed,Female,25.9,12.7,142,215
+298,Oliver,Mixed,Male,45.7,26.5,214,216
+299,Stella,Mixed,Male,29.8,14.2,23,216
+300,Jax,Mixed,Female,40,19.2,143,216
+301,Cooper,Mixed,Male,39,15.4,219,217
+302,Riley,Mixed,Female,46.3,21.8,224,217
+303,Louie,Mixed,Male,40,15.1,146,217
+304,Pepper,Mixed,Female,45.9,21.4,221,217
+305,Milo,Mixed,Male,41.8,16.1,82,223
+306,Diesel,Mixed,Male,48.5,19.2,218,223
+307,Milo,Mixed,Female,42.5,17.9,242,223
+308,Henry,Mixed,Female,44.8,18.2,225,223
+309,Bailey,Mixed,Female,42.8,18.7,226,227
+310,Oscar,Mixed,Female,49.7,22.6,221,227
+311,Max,Mixed,Female,40.1,18,218,228
+312,Bear,Mixed,Female,48.3,21.1,221,229
+313,Penny,Mixed,Female,46.9,22.3,161,230
+314,Lola,Poodle x French Bulldog,Male,37,16.2,155,234
+315,Lucy,Poodle x French Bulldog,Male,38.9,16.4,232,234
+316,Charlie,Mixed,Male,39.4,17.3,237,234
+317,Milo,Poodle x French Bulldog,Male,37,14.7,152,234
+318,Toby,Poodle x French Bulldog,Male,36,17.2,233,235
+319,Jack,Poodle x French Bulldog,Male,36,16.5,152,235
+320,Bella,Mixed,Female,35.8,18.1,237,235
+321,Milo,Poodle x French Bulldog,Female,35.6,17.2,88,235
+322,Lilly,Poodle x French Bulldog,Male,36.5,17.1,85,236
+323,Bear,Poodle x French Bulldog,Female,35,17.8,157,236
+324,Luna,Poodle x French Bulldog,Male,36.8,18.1,155,236
+325,Daisy,Poodle x French Bulldog,Male,34.6,18.4,233,236
+326,Nala,Mixed,Male,34.1,18.9,157,238
+327,Oscar,Mixed,Male,36.1,18.2,152,238
+328,Lilly,Mixed,Female,40.8,19.6,246,240
+329,Luna,Mixed,Female,32.8,13.5,33,243
+330,Murphy,Mixed,Male,33.8,13.3,167,243
+331,Rocky,Mixed,Male,33.6,13.4,167,243
+332,Rocky,Mixed,Male,36.3,15.7,162,244
+333,Jax,Mixed,Female,34,15,242,244
+334,Finn,Mixed,Female,35.6,17.5,241,245
+335,Bentley,Mixed,Male,35.7,17,241,245
+336,Louie,Mixed,Male,53.3,30.4,45,250
+337,Rosie,Mixed,Female,31.4,8.5,174,254
+338,Rosie,Mixed,Male,63.6,33.8,178,256
+339,Lilly,Mixed,Female,64.2,36.8,119,257
+340,Murphy,Mixed,Female,62.2,33.5,55,257
+341,Lucy,Mixed,Female,48.6,25.5,37,257
+342,Milo,Mixed,Male,50.2,24.6,164,257
+343,Riley,Mixed,Female,59.6,29.6,181,258
+344,Roxy,Mixed,Female,63.3,34.7,178,260
+345,Luna,Mixed,Female,62.8,37.4,185,260
+346,Cooper,Mixed,Male,66.4,37.1,119,260
+347,Maggie,Mixed,Male,57.8,27.2,221,261
+348,Oliver,Mixed,Male,63,29.3,181,261
+349,Maggie,Mixed,Female,64.5,30.2,182,261
+350,Oscar,Mixed,Male,57.7,27.5,255,261
+351,Charlie,Mixed,Male,37.3,18.8,60,263
+352,Jack,Mixed,Female,38.9,17.4,60,263
+353,Coco,Mixed,Female,40,20.7,57,264
+354,Lucy,Mixed,Male,33.7,15.6,5,264
+355,Jack,Mixed,Male,41,21.8,121,264
+356,Shadow,Mixed,Male,39.7,19.6,60,264
+357,Buddy,Mixed,Male,27,9.5,188,266
+358,Molly,Mixed,Female,27.1,9,193,266
+359,Rosie,Mixed,Female,27.9,9.3,270,267
+360,Daisy,Mixed,Female,25.8,10.4,271,267
+361,Murphy,Mixed,Female,25.8,9.8,193,267
+362,Max,Mixed,Male,27.2,9,193,269
+363,Luna,Mixed,Male,28.1,9.4,275,269
+364,Shadow,Mixed,Male,26.6,8.7,190,269
+365,Chloe,Mixed,Male,27.6,10.6,193,272
+366,Sadie,Mixed,Male,29.2,9.7,268,272
+367,Nala,Mixed,Female,27.1,8.8,190,273
+368,Bentley,Mixed,Male,29.2,9.6,7,273
+369,Chloe,Mixed,Female,27.6,9.4,126,273
+370,Rosie,Mixed,Female,27.5,8.3,276,273
+371,Chloe,Mixed,Male,29.4,9.8,7,274
+372,Leo,Mixed,Female,65.4,37.5,278,277
+373,Bear,Mixed,Female,65.5,36.6,45,277
+374,Lucy,Mixed,Female,62.1,43.3,278,277
+375,Jack,Mixed,Male,63.7,42.6,279,277
+376,Rocky,Mixed,Male,54.8,34.5,130,280
+377,Shadow,Mixed,Female,54.1,30.7,130,280
+378,Bailey,Mixed,Male,55.3,31.6,279,280
+379,Lola,Mixed,Male,48.7,22.5,101,280
+380,Rocky,Mixed,Male,63.4,44.3,279,281
+381,Diesel,Mixed,Female,67.2,43.8,279,282
+382,Molly,Mixed,Female,65.7,41.2,278,282
+383,Chloe,Mixed,Male,67.7,42,279,282
+384,Molly,Mixed,Female,66.6,39.8,199,282
+385,Luna,German Shepherd,Female,57.4,29.5,202,283
+386,Leo,German Shepherd,Female,56.9,31.1,70,284
+387,Zoe,German Shepherd,Male,60.9,35,70,284
+388,Lucy,German Shepherd,Female,56.7,38.4,205,284
+389,Henry,German Shepherd,Male,54.1,30.3,202,285
+390,Coco,German Shepherd,Male,59.2,40.1,205,285
+391,Nala,German Shepherd,Male,60.9,34.7,71,285
+392,Cooper,Mixed,Female,29,8.6,210,286
+393,Nala,Mixed,Male,29.6,9.2,73,286
+394,Molly,Mixed,Female,28.4,9.7,332,286
+395,Buddy,Mixed,Female,29.8,8.4,287,290
+396,Ruby,Mixed,Female,30.9,11.4,138,290
+397,Gracie,Mixed,Male,36.9,14.1,288,292
+398,Jack,Mixed,Male,36,14.6,288,292
+399,Murphy,Mixed,Female,42.4,16.8,211,292
+400,Lilly,Mixed,Male,35.6,12.3,289,293
+401,Lilly,Mixed,Male,36.7,13.6,287,294
+402,Louie,Mixed,Female,36.6,17.3,138,295
+403,Lucy,Mixed,Female,35.8,15.5,332,295
+404,Jack,Mixed,Male,31.9,12.8,288,295
+405,Henry,Mixed,Male,38.6,16.9,296,295
+406,Nala,Mixed,Female,23.3,12.5,212,297
+407,Sadie,Mixed,Male,38.8,17.4,135,300
+408,Lola,Mixed,Male,31.5,15.9,213,300
+409,Rocky,Mixed,Female,47.2,23.7,218,302
+410,Nala,Mixed,Male,43.2,19.6,146,302
+411,Gracie,Mixed,Female,47.6,20.2,218,304
+412,Pepper,Mixed,Male,41.8,24.6,89,304
+413,Rosie,Mixed,Female,37.9,15.7,82,304
+414,Molly,Mixed,Female,49.8,24.3,221,304
+415,Maggie,Mixed,Male,40.5,17.1,303,307
+416,Lola,Mixed,Female,44.9,16.1,305,308
+417,Leo,Mixed,Female,44.5,17,303,308
+418,Finn,Mixed,Female,45.7,18.6,306,308
+419,Gracie,Mixed,Male,52.9,21.1,220,308
+420,Louie,Mixed,Female,36.6,15,82,309
+421,Gus,Mixed,Male,44.5,16.3,146,309
+422,Duke,Mixed,Female,44.3,19.5,219,310
+423,Bentley,Mixed,Male,50.8,21.5,218,310
+424,Molly,Mixed,Female,56.3,25.6,221,310
+425,Luna,Mixed,Female,44.6,18.7,301,310
+426,Ruby,Mixed,Male,46.7,21.3,221,311
+427,Chloe,Mixed,Male,50.2,23.6,25,311
+428,Bailey,Mixed,Male,38.8,16.1,225,311
+429,Pepper,Mixed,Male,40.7,17.7,206,312
+430,Molly,Mixed,Male,45.8,19.2,305,312
+431,Stella,Mixed,Male,56.3,24.3,25,312
+432,Bentley,Mixed,Male,46.7,19.8,306,312
+433,Harley,Mixed,Male,55,24.6,221,313
+434,Willow,Mixed,Female,55.9,31.2,179,313
+435,Gracie,Mixed,Male,31.8,16.1,212,313
+436,Gus,Mixed,Male,50.6,23.7,221,313
+437,Oscar,Mixed,Female,39.7,21.2,27,320
+438,Sadie,Poodle x French Bulldog,Male,35.3,15.8,317,321
+439,Rocky,Poodle x French Bulldog,Male,35.9,17.3,315,321
+440,Max,Poodle x French Bulldog,Female,37.4,17.9,319,321
+441,Henry,Poodle x French Bulldog,Male,35.1,19.1,233,323
+442,Roxy,Mixed,Male,37.7,17,162,328
+443,Cooper,Mixed,Female,34.6,14.8,335,329
+444,Penny,Mixed,Female,28.3,12.3,142,333
+445,Shadow,Mixed,Female,34.4,16.9,164,334
+446,Willow,Mixed,Male,34.6,16.2,330,334
+447,Gus,Mixed,Female,35.2,15.4,162,334
+448,Max,Mixed,Male,40.2,21.6,89,334
+449,Harley,Mixed,Female,30.5,8,176,337
+450,Stella,Mixed,Male,28.1,7.6,253,337
+451,Zoe,Mixed,Female,60.3,36.8,178,339
+452,Louie,Mixed,Female,60.9,44.5,54,339
+453,Bentley,Mixed,Female,60.9,31.8,185,340
+454,Jack,Mixed,Male,61,35.2,255,340
+455,Oliver,Mixed,Female,56.6,30,338,341
+456,Lucy,Mixed,Female,56.2,28.4,259,341
+457,Penny,Mixed,Female,60.5,35.4,119,343
+458,Chloe,Mixed,Female,61.8,32,55,343
+459,Gus,Mixed,Female,61.8,30.6,348,343
+460,Roxy,Mixed,Female,40.5,22.6,213,344
+461,Roxy,Mixed,Female,54,26.2,421,345
+462,Rocky,Mixed,Female,62.5,43.2,54,345
+463,Charlie,Mixed,Male,60.5,35.2,119,345
+464,Max,Mixed,Male,62.5,30.5,262,349
+465,Louie,Mixed,Female,49.5,23.1,397,349
+466,Max,Mixed,Male,62.3,30.6,347,349
+467,Oliver,Mixed,Female,38.4,17.3,351,352
+468,Finn,Mixed,Female,42.5,22.2,60,353
+469,Bear,Mixed,Male,38.5,18.8,123,353
+470,Diesel,Mixed,Female,39.7,20.8,60,353
+471,Stella,Mixed,Female,26.5,7.8,190,358
+472,Oscar,Mixed,Female,29.6,8.6,268,358
+473,Lola,Mixed,Male,27.9,9.9,365,359
+474,Molly,Mixed,Male,26.3,9.7,188,359
+475,Lucy,Mixed,Female,26.6,9.9,364,360
+476,Riley,Mixed,Female,26.8,10.4,188,360
+477,Gus,Mixed,Male,26.7,9.4,265,360
+478,Maggie,Mixed,Male,27.8,9.7,366,360
+479,Bear,Mixed,Female,26.2,10.5,193,361
+480,Coco,Mixed,Female,27.7,11,368,361
+481,Milo,Mixed,Male,28,8.8,368,361
+482,Gus,Mixed,Female,26.9,8.9,362,367
+483,Coco,Mixed,Male,28.3,8.7,363,367
+484,Louie,Mixed,Male,28.7,8.7,276,367
+485,Roxy,Mixed,Male,28.4,8.6,366,367
+486,Willow,Mixed,Male,28.6,10.2,368,369
+487,Bentley,Mixed,Male,25.7,9,193,369
+488,Bailey,Mixed,Female,28,9.2,366,369
+489,Gus,Mixed,Male,26.7,7.8,276,370
+490,Zoe,Mixed,Male,27.1,9.6,366,370
+491,Duke,Mixed,Male,27.9,10.1,368,370
+492,Lucy,Mixed,Male,27.9,9,368,370
+493,Bailey,Mixed,Male,56,31.2,379,372
+494,Gracie,Mixed,Female,66.5,42.4,383,372
+495,Max,Mixed,Male,59,29,379,372
+496,Louie,Mixed,Male,55.2,28.2,219,372
+497,Oscar,Mixed,Male,63.2,35.9,375,373
+498,Penny,Mixed,Female,64.3,40.2,380,373
+499,Ellie,Mixed,Male,61,41,278,374
+500,Zeus,Mixed,Female,64.9,43.1,380,374
+501,Luna,Mixed,Male,67.2,38.5,383,374
+502,Leo,Mixed,Male,56.3,39.6,376,374
+503,Chloe,Mixed,Female,60.1,33.6,198,377
+504,Zeus,Mixed,Male,59,36.5,279,377
+505,Riley,Mixed,Male,62.2,36.7,378,381
+506,Daisy,Mixed,Female,58.9,33.5,376,381
+507,Cooper,Mixed,Male,66.3,47.3,198,381
+508,Oscar,Mixed,Female,62.8,42.5,375,382
+509,Chloe,Mixed,Female,67.2,44.7,198,382
+510,Diesel,Mixed,Female,51.9,27.8,135,382
+511,Diesel,Mixed,Male,63.5,39.4,278,384
+512,Nala,German Shepherd,Female,58.2,31.5,205,385
+513,Jax,German Shepherd,Female,54.9,32.1,71,385
+514,Diesel,German Shepherd,Female,58.6,29.6,202,385
+515,Cooper,German Shepherd,Female,60.4,32.2,15,386
+516,Winnie,German Shepherd,Female,54.3,33.6,202,388
+517,Max,German Shepherd,Female,59.8,33.5,203,388
+518,Lola,Mixed,Female,33.8,15.4,241,392
+519,Ruby,Mixed,Female,32.9,11.6,135,392
+520,Oscar,Mixed,Male,31.6,11,211,394
+521,Zeus,Mixed,Female,42.8,20.1,43,395
+522,Riley,Mixed,Female,28.7,8.1,288,395
+523,Gracie,Mixed,Female,31.5,10.2,206,396
+524,Max,Mixed,Male,41.9,14.9,73,399
+525,Finn,Mixed,Female,38.8,15.5,397,399
+526,Nala,Mixed,Male,48.2,20.3,427,399
+527,Chloe,Mixed,Male,36.4,14.8,404,399
+528,Henry,Mixed,Female,33.8,14.3,404,402
+529,Nala,Mixed,Female,36.4,17.2,398,402
+530,Ellie,Mixed,Male,33.6,12.9,287,403
+531,Rosie,Mixed,Female,36.6,15.1,136,403
+532,Charlie,Mixed,Female,37.3,16.9,405,403
+533,Shadow,Mixed,Male,36.1,16.2,405,403
+534,Ellie,Mixed,Male,32.6,19.7,298,406
+535,Oscar,Mixed,Female,31.4,16,407,406
+536,Max,Mixed,Male,33.8,15.2,219,406
+537,Chloe,Mixed,Female,30.7,12.9,401,406
+538,Toby,Mixed,Female,40.6,21.4,335,409
+539,Henry,Mixed,Male,50.6,23.7,433,409
+540,Riley,Mixed,Female,46,16.8,301,411
+541,Finn,Mixed,Female,51.3,24,433,411
+542,Leo,Mixed,Female,44,19.6,226,411
+543,Oscar,Mixed,Female,43,18.3,306,413
+544,Duke,Mixed,Female,44.7,20.7,102,413
+545,Shadow,Mixed,Female,39.9,16.7,415,413
+546,Chloe,Mixed,Female,39.8,20.8,435,414
+547,Zoe,Mixed,Male,43.8,19,410,416
+548,Zeus,Mixed,Female,47.4,17.6,427,416
+549,Zoe,Mixed,Male,50.5,22.9,224,416
+550,Roxy,Mixed,Female,44.1,15.9,219,416
+551,Toby,Mixed,Male,49.2,19.8,433,417
+552,Riley,Mixed,Female,46,18,410,417
+553,Henry,Mixed,Male,38.2,14.5,287,418
+554,Willow,Mixed,Male,43.3,16.2,303,418
+555,Jack,Mixed,Female,54.8,26.2,178,418
+556,Milo,Mixed,Male,49.9,25.8,378,418
+557,Rosie,Mixed,Female,37.2,15.9,225,420
+558,Moose,Mixed,Female,44.7,18.8,231,420
+559,Shadow,Mixed,Male,39.8,15.1,146,420
+560,Penny,Mixed,Male,39,15.9,303,420
+561,Rosie,Mixed,Male,40.3,16.7,226,422
+562,Zeus,Mixed,Female,46.7,20,83,422
+563,Zoe,Mixed,Male,51.4,23.4,350,422
+564,Gracie,Mixed,Male,57.3,24.9,249,422
+565,Zoe,Mixed,Female,50.9,21.1,421,424
+566,Milo,Mixed,Female,38.4,17.7,435,425
+567,Jack,Mixed,Male,51.4,22.5,221,425
+568,Gus,Mixed,Male,52.8,27.5,306,434
+569,Zoe,Mixed,Male,38.9,20,142,434
+570,Zeus,Mixed,Female,35.8,19.4,327,437
+571,Zeus,Poodle x French Bulldog,Male,37.2,18.6,88,440
+572,Ellie,Poodle x French Bulldog,Female,37.9,17.7,155,440
+573,Stella,Mixed,Female,33,15,33,443
+574,Duke,Mixed,Female,31.8,15.1,446,444
+575,Coco,Mixed,Male,36.3,17.5,442,445
+576,Pepper,Mixed,Male,36.5,15,242,447
+577,Leo,Mixed,Female,50.1,24.4,99,447
+578,Gus,Mixed,Female,48.6,18.7,431,447
+579,Zoe,Mixed,Female,36.7,17.6,335,447
+580,Milo,Mixed,Female,31.8,7.6,174,449
+581,Rosie,Mixed,Female,31,9,176,449
+1,Moose,Mixed,Male,33.5,8.9,174,449

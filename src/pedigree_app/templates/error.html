@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Error – Pedigree Explorer{% endblock %}
+{% block content %}
+<div class="alert alert-danger d-flex align-items-center gap-2" role="alert" data-testid="error-message">
+  <span class="fs-4">⚠️</span>
+  <div>{{ message }}</div>
+</div>
+<a href="/" class="btn btn-outline-secondary">← Back to dogs list</a>
+{% endblock %}

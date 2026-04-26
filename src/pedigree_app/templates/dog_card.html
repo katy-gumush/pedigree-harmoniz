@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}{{ dog.name }} – Pedigree Explorer{% endblock %}
+{% block content %}
+<nav aria-label="breadcrumb" class="mb-3">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/">Dogs</a></li>
+    <li class="breadcrumb-item active">{{ dog.name }} #{{ dog.id }}</li>
+  </ol>
+</nav>
+
+<div class="card shadow-sm" data-testid="dog-card">
+  <div class="card-header bg-dark text-white d-flex align-items-center gap-2">
+    <span class="fs-4">🐶</span>
+    <span class="fw-bold fs-5" data-testid="dog-card-name">{{ dog.name }}</span>
+    <span class="badge bg-secondary ms-auto">#{{ dog.id }}</span>
+  </div>
+  <div class="card-body">
+    <dl class="row mb-0">
+      <dt class="col-sm-3">ID</dt>
+      <dd class="col-sm-9" data-testid="dog-card-id">{{ dog.id }}</dd>
+
+      <dt class="col-sm-3">Name</dt>
+      <dd class="col-sm-9">{{ dog.name }}</dd>
+
+      <dt class="col-sm-3">Breed</dt>
+      <dd class="col-sm-9" data-testid="dog-card-breed">{{ dog.breed }}</dd>
+
+      <dt class="col-sm-3">Sex</dt>
+      <dd class="col-sm-9" data-testid="dog-card-sex">{{ dog.sex }}</dd>
+
+      <dt class="col-sm-3">Height</dt>
+      <dd class="col-sm-9" data-testid="dog-card-height">{{ dog.height_cm }} cm</dd>
+
+      <dt class="col-sm-3">Weight</dt>
+      <dd class="col-sm-9" data-testid="dog-card-weight">{{ dog.weight_kg }} kg</dd>
+
+      <dt class="col-sm-3">Sire</dt>
+      <dd class="col-sm-9" data-testid="dog-card-sire">
+        {% if sire %}<a href="/dogs/{{ sire.id }}">{{ sire.name }} (#{{ sire.id }})</a>
+        {% elif dog.sire_id %}<span class="text-danger">Unknown (id: {{ dog.sire_id }})</span>
+        {% else %}—{% endif %}
+      </dd>
+
+      <dt class="col-sm-3">Dam</dt>
+      <dd class="col-sm-9" data-testid="dog-card-dam">
+        {% if dam %}<a href="/dogs/{{ dam.id }}">{{ dam.name }} (#{{ dam.id }})</a>
+        {% elif dog.dam_id %}<span class="text-danger">Unknown (id: {{ dog.dam_id }})</span>
+        {% else %}—{% endif %}
+      </dd>
+    </dl>
+  </div>
+  <div class="card-footer">
+    <a href="/dogs/{{ dog.id }}/pedigree" class="btn btn-primary" data-testid="pedigree-link">
+      View Pedigree
+    </a>
+  </div>
+</div>
+{% endblock %}
