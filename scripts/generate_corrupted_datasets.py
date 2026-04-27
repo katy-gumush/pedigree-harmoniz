@@ -1,6 +1,10 @@
-"""Write pedigree CSV fixtures for integrity tests.
+"""Regenerate pedigree CSV fixtures under fixtures/csv/.
 
-Outputs to java-tests/src/test/resources/fixtures/:
+``fixtures/csv/*.csv`` are normally **committed** to the repo—you only need to run this
+after changing ``Dogs Pedigree.csv`` (refreshes ``clean.csv``) or when editing the
+corrupt scenarios below.
+
+Outputs to fixtures/csv/:
 
   clean.csv
       Full copy of the repo baseline ``Dogs Pedigree.csv`` (all dogs).
@@ -28,7 +32,7 @@ import shutil
 from pathlib import Path
 
 BASELINE = Path(__file__).parent.parent / "Dogs Pedigree.csv"
-OUTPUT_DIR = Path(__file__).parent.parent / "java-tests/src/test/resources/fixtures"
+OUTPUT_DIR = Path(__file__).parent.parent / "fixtures/csv"
 
 FIELDNAMES = ["ID", "Name", "Breed", "Sex", "Height_cm", "Weight_kg", "Sire_ID", "Dam_ID"]
 

@@ -4,7 +4,7 @@
 #
 # Usage: open this file as a notebook in a Databricks Repo cloned from this
 # repository, attach a cluster, run all cells.
-# MAGIC %pip install pytest
+# MAGIC %pip install pytest httpx
 # COMMAND ----------
 import os
 import sys
@@ -23,14 +23,14 @@ def _repo_root() -> Path:
     if "REPO_ROOT" in os.environ:
         return Path(os.environ["REPO_ROOT"])
     
-    # Try from __file__ if available (regular Python execution)
+    # Try from _file_ if available (regular Python execution)
     try:
         here = Path(__file__).resolve()
         for ancestor in [here.parent] + list(here.parents):
             if (ancestor / "pyproject.toml").exists():
                 return ancestor
     except NameError:
-        pass  # __file__ not defined in notebook context
+        pass  # _file_ not defined in notebook context
     
     # Fallback: search upward from current working directory
     cwd = Path.cwd()
@@ -49,5 +49,7 @@ src = str(root / "src")
 if src not in sys.path:
     sys.path.insert(0, src)
 sys.dont_write_bytecode = True
-retcode = pytest.main([str(root / "tests"), "-v", "-p", "no:cacheprovider"])
+retcode = pytest.main(
+    [str(root / "tests"), "-v", "-p", "no:cacheprovider", "-m", "not ui"]
+)
 assert retcode == 0, "The pytest invocation failed. See the log for details."

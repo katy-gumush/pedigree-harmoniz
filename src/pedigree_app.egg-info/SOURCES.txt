@@ -10,5 +10,10 @@ src/pedigree_app.egg-info/SOURCES.txt
 src/pedigree_app.egg-info/dependency_links.txt
 src/pedigree_app.egg-info/requires.txt
 src/pedigree_app.egg-info/top_level.txt
-tests/test_load_csv.py
-tests/test_pedigree.py
+tests/__init__.py
+tests/conftest.py
+tests/csv_helpers.py
+tests/dataset_validation.py
+tests/pedigree_helpers.py
+tests/test_api.py
+tests/test_data_level.py

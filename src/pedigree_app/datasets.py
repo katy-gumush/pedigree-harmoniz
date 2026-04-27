@@ -15,7 +15,7 @@ from pathlib import Path
 from pedigree_app.load_csv import Dog, load_dogs
 
 _REPO_ROOT = Path(__file__).resolve().parent.parent.parent
-_FIXTURES_DIR = _REPO_ROOT / "java-tests" / "src" / "test" / "resources" / "fixtures"
+_FIXTURES_DIR = _REPO_ROOT / "fixtures" / "csv"
 
 COOKIE_NAME = "pedigree_dataset"
 DEFAULT_DATASET_KEY = "full"

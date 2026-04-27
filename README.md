@@ -1,151 +1,121 @@
 # Pedigree Explorer
 
-A small web application that exposes a dogs pedigree dataset as a REST API and HTML UI, together with a complete automated test suite covering data integrity, API contracts, and UI behavior.
+A small web application that exposes a dogs pedigree dataset as a REST API and HTML UI, with automated tests in **Python only** (data, API, UI).
 
 ## Project structure
 
 ```
 pedigree/
-  Dogs Pedigree.csv              baseline dataset (581 dogs)
+  Dogs Pedigree.csv              baseline dataset (~581 dogs)
+  fixtures/csv/                  CSV fixtures (committed; corrupt variants + clean copy of baseline)
   pyproject.toml                 Python app build definition
   src/pedigree_app/
     load_csv.py                  CSV → typed Dog records
     pedigree.py                  BFS ancestor/descendant traversal, depth ≤ 5
     main.py                      FastAPI app (REST + Jinja2 UI)
     templates/                   HTML pages with data-testid attributes
-    static/                      CSS
+    static/                      CSS + pedigree tree JS
   scripts/
-    generate_corrupted_datasets.py   copies baseline to clean.csv; writes small corrupt fixtures
+    generate_corrupted_datasets.py   optional: regenerate fixtures/csv/ after changing Dogs Pedigree.csv
   tests/
-    test_load_csv.py, test_pedigree.py   pytest unit tests for `pedigree_app` (CSV + pedigree logic)
+    test_api.py, test_data_level.py  pytest: API + Data + loader/pedigree helpers
+    ui/                              Playwright UI tests (requires browser + running app)
+    …                                dataset_validation, csv_helpers, pedigree_helpers, conftest
   databricks/
-    run_unit_tests.py              Databricks notebook source: `%pip` + pytest on `tests/` (Repos)
-  java-tests/
-    pom.xml                      Maven project (JUnit 5 + Commons CSV + REST Assured + Playwright)
-    src/test/java/com/pedigree/
-      data/PedigreeCsvIntegrityTest.java    data-layer tests
-      api/PedigreeApiTest.java              API-layer tests
-      ui/PedigreeUiTest.java                UI-layer Playwright tests
-    src/test/resources/fixtures/   clean (full baseline) + minimal corrupt CSVs (generated)
-  TESTING.md                     test strategy and error scenario explanations
+    run_unit_tests.py              Notebook: pytest API + data only (no Playwright)
+  TESTING.md                       test strategy notes
 ```
 
 ## Requirements
 
-| Toolchain | Minimum version |
-|-----------|----------------|
-| Python    | 3.11            |
-| Java      | 21 (Temurin)    |
-| Maven     | 3.9             |
+| Item | Notes |
+|------|--------|
+| **Python** | 3.11+ (see `pyproject.toml`) |
+| **uv** (recommended) | Installs dependencies and runs tools: `uv venv`, `uv pip install`, `uv run` |
+| **App package** | `uv pip install -e .` — FastAPI, Uvicorn, Jinja2, etc. |
+| **Dev / test tools** | `uv pip install -e ".[dev]"` — `pytest`, `httpx` (API tests), `pytest-playwright`, `playwright` (UI tests) |
+| **Playwright browsers** | Only for **UI** tests: `uv run playwright install chromium` (run once per venv; re-run after upgrading the `playwright` package) |
 
-## Quick start
+If `python3 -m pip` fails on macOS with `pyexpat` / `_XML_SetAllocTrackerActivationThreshold`, use **`uv pip`** or reinstall Homebrew Python.
 
-### 1 — Install Python dependencies
+## Install (one-time)
 
-```bash
-# from the repo root
-uv venv .venv                    # or: python -m venv .venv
-uv pip install -e .              # installs fastapi, uvicorn, jinja2, etc.
-```
-
-### 2 — Generate test fixtures (corrupted CSVs)
+From the repository root:
 
 ```bash
-.venv/bin/python scripts/generate_corrupted_datasets.py
-```
-
-This copies `Dogs Pedigree.csv` to `clean.csv` and writes four small corrupted variants into `java-tests/src/test/resources/fixtures/` (one issue per corrupt file).
-
-### 3 — Start the application
-
-```bash
-PYTHONPATH=src .venv/bin/uvicorn pedigree_app.main:app --reload
-```
-
-The app listens on `http://127.0.0.1:8000` by default.
-
-**Switching data:** The navbar **Data source** dropdown and **`POST /api/dataset`**
-(JSON `{"dataset":"<key>"}`) set the same cookie—no restart. Registry includes the
-primary CSV (`full`), baseline copy (`clean`), and minimal corrupt fixtures.
-
-Optional **`PEDIGREE_CSV_PATH`** overrides which file backs the **`full`** key only
-(CI path to the baseline); you can still switch to fixtures via UI or API.
-
-```bash
-PEDIGREE_CSV_PATH=/absolute/path/to/Dogs\ Pedigree.csv \
-  PYTHONPATH=src .venv/bin/uvicorn pedigree_app.main:app
-```
-
-### 4 — Install Playwright browser (first time only)
-
-```bash
-cd java-tests
-JAVA_HOME=$(/usr/libexec/java_home -v 21) \
-  mvn exec:java \
-    -Dexec.mainClass=com.microsoft.playwright.CLI \
-    -Dexec.args="install chromium" \
-    -Dexec.classpathScope=test
-```
-
-### 5 — Run all tests
-
-**Python (pytest)** — from the repo root, no running app required:
-
-```bash
+uv venv .venv
+source .venv/bin/activate          # optional; or use `uv run` for every command
+uv pip install -e .
 uv pip install -e ".[dev]"
-pytest
 ```
 
-On **Databricks**, clone this repo as a [Repo](https://docs.databricks.com/aws/en/repos/git-operations-with-repos), open `databricks/run_unit_tests.py` as a notebook, attach a cluster, and run all cells (see [unit testing for notebooks](https://docs.databricks.com/aws/en/notebooks/testing)).
+You **do not** need to run **`scripts/generate_corrupted_datasets.py`** for a normal checkout: **`fixtures/csv/*.csv`** are **already in the repository** (`clean.csv` plus the small corrupt CSVs). The app’s dataset switcher and tests use those files directly.
 
-**Java** — with the app running on port 8000:
+Run **`uv run python scripts/generate_corrupted_datasets.py`** only when **maintainers** change **`Dogs Pedigree.csv`** and want to refresh **`clean.csv`** (full baseline copy) and regenerate the scripted corrupt variants.
+
+## Run the server
+
+The app must be a **Python package** on `PYTHONPATH` (the `src` layout). Use either:
 
 ```bash
-cd java-tests
-JAVA_HOME=$(/usr/libexec/java_home -v 21) mvn test
+# from repo root — development (auto-reload on code changes)
+PYTHONPATH=src uv run uvicorn pedigree_app.main:app --reload --host 127.0.0.1 --port 8000
 ```
 
-Expected output:
-
-```
-Tests run: 4,  Failures: 0  -- com.pedigree.data.PedigreeCsvIntegrityTest
-Tests run: 19, Failures: 0  -- com.pedigree.api.PedigreeApiTest
-Tests run: 11, Failures: 0  -- com.pedigree.ui.PedigreeUiTest
-BUILD SUCCESS
-```
-
-### 6 — Run a single test layer
+or, if you prefer `cd` into `src` (not required when using `PYTHONPATH=src`):
 
 ```bash
-# data tests only — no running app needed
-mvn test -Dgroups=data
-
-# API tests only
-mvn test -Dgroups=api
-
-# UI tests only
-mvn test -Dgroups=ui
+cd src && uv run uvicorn pedigree_app.main:app --reload
 ```
 
-Override the base URL if the app runs on a different port:
+- **URL:** [http://127.0.0.1:8000](http://127.0.0.1:8000) (default Uvicorn port **8000**).
+- **Optional:** set `PEDIGREE_CSV_PATH` to a file that backs the **`full`** dataset key; the UI/API **Data source** switcher can still point at `clean` and other `fixtures/csv` files without restart.
+
+**Using the venv without `uv run`:** activate `.venv` and run `uvicorn` the same way, or call `python -m uvicorn ...` with that interpreter.
+
+## Run tests
+
+Use **`uv run pytest ...`** so the project venv is used (avoids `pytest: command not found` if the venv is not activated).
+
+| What you want | Server running? | Command |
+|----------------|-----------------|---------|
+| **API + Data** (default; no browser) | **No** | `uv run pytest` |
+| **API tests only** | No | `uv run pytest tests/test_api.py -v` |
+| **Data tests only** | No | `uv run pytest tests/test_data_level.py -v` |
+| **UI (Playwright)** | **Yes** (see [Run the server](#run-the-server)) | See below |
+
+**UI tests** (Chromium + app on **8000** unless you override):
+
+1. One-time (or after upgrading Playwright): `uv run playwright install chromium`
+2. Start the server in one terminal: `PYTHONPATH=src uv run uvicorn pedigree_app.main:app --port 8000`
+3. In another terminal: `uv run pytest tests/ui -v`  
+   - If the app uses another host/port: `PEDIGREE_UI_BASE_URL=http://127.0.0.1:PORT uv run pytest tests/ui -v`
+
+**All automated tests in one go (API + Data + UI):** start the server, install Chromium, then:
 
 ```bash
-mvn test -Dbase.url=http://127.0.0.1:9000
+uv run pytest tests/test_api.py tests/test_data_level.py tests/ui -v
 ```
+
+Note: plain `uv run pytest` (no paths) does **not** collect `tests/ui/` by design; pass `tests/ui` explicitly to include Playwright tests.
+
+## Databricks
+
+Clone this repo as a [Databricks Repo](https://docs.databricks.com/aws/en/repos/git-operations-with-repos), open **`databricks/run_unit_tests.py`**, attach a cluster, run all cells. Install dependencies there (e.g. **`%pip install pytest httpx`** and **`%pip install -e .`** after changing to the repo root). That notebook runs **API + Data** tests only — not Playwright/UI.
 
 ## Application endpoints
 
 | Method | Path | Description |
 |--------|------|-------------|
 | GET | `/` | HTML dogs table |
-| GET | `/dogs/{id}` | HTML dog card (birth certificate) |
-| GET | `/dogs/{id}/pedigree` | HTML pedigree view (±5 generations) |
-| GET | `/api/dogs` | JSON list of all dogs |
-| GET | `/api/dogs/{id}` | JSON single dog |
-| GET | `/api/dogs/{id}/pedigree` | JSON ancestors + descendants, depth ≤ 5 |
-| GET | `/api/dogs/{id}/pedigree-network` | JSON nodes + edges for a local tree window |
-| GET | `/api/dataset` | JSON: `switching_enabled` (always true), current cookie key, `{key,label}` options |
-| POST | `/api/dataset` | JSON body `{"dataset":"<registry_key>"}`; sets `pedigree_dataset` cookie; returns `{ok, dataset}` |
-| POST | `/dataset` | Form field `dataset` = registry key; sets cookie and redirects (HTML navbar picker) |
+| GET | `/dogs/{id}` | HTML dog card |
+| GET | `/dogs/{id}/pedigree` | HTML pedigree view |
+| GET | `/api/dogs` | JSON list |
+| GET | `/api/dogs/{id}` | JSON dog |
+| GET | `/api/dogs/{id}/pedigree` | JSON pedigree |
+| GET | `/api/dogs/{id}/pedigree-network` | JSON nodes + edges |
+| GET | `/api/dataset` | Current dataset + options |
+| POST | `/api/dataset` | Select dataset (JSON body) |
+| POST | `/dataset` | Form post for navbar picker |
 
-Interactive API docs: `http://127.0.0.1:8000/docs`
+Interactive API docs: **http://127.0.0.1:8000/docs**
