@@ -14,19 +14,33 @@ import pytest
 
 
 def _repo_root() -> Path:
-    dbg = globals().get("dbutils")
-    if dbg is not None:
-        raw = dbg.notebook.entry_point.getDbutils().notebook.getContext().notebookPath().get()
-        start = Path(raw).parent
-        for ancestor in [start] + list(start.parents):
+    """Find repository root by searching for pyproject.toml.
+    
+    Works in both notebook and regular Python environments.
+    Serverless-compatible: avoids Java/JVM APIs.
+    """
+    # Try environment variable first (if set by user)
+    if "REPO_ROOT" in os.environ:
+        return Path(os.environ["REPO_ROOT"])
+    
+    # Try from __file__ if available (regular Python execution)
+    try:
+        here = Path(__file__).resolve()
+        for ancestor in [here.parent] + list(here.parents):
             if (ancestor / "pyproject.toml").exists():
                 return ancestor
-        return start.parent
-    here = Path(__file__).resolve()
-    for ancestor in [here.parent] + list(here.parents):
+    except NameError:
+        pass  # __file__ not defined in notebook context
+    
+    # Fallback: search upward from current working directory
+    cwd = Path.cwd()
+    for ancestor in [cwd] + list(cwd.parents):
         if (ancestor / "pyproject.toml").exists():
             return ancestor
-    return here.parent.parent
+    
+    # Last resort: assume we're in a subdirectory of the repo
+    # (e.g., /Workspace/Users/.../pedigree-harmoniz/databricks)
+    return cwd.parent
 
 
 root = _repo_root()
