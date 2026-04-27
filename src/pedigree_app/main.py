@@ -2,22 +2,23 @@
 
 from __future__ import annotations
 
-import os
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Request
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from pedigree_app.datasets import (
     COOKIE_NAME,
     DATASET_OPTIONS,
+    apply_pedigree_dataset_cookie,
     dataset_keys,
     dogs_for_cookie,
     selected_key_from_cookie,
 )
-from pedigree_app.load_csv import Dog, load_dogs
+from pedigree_app.load_csv import Dog
+from pydantic import BaseModel, Field
 from pedigree_app.pedigree import (
     MAX_GENERATIONS,
     PedigreeNetwork,
@@ -28,16 +29,11 @@ from pedigree_app.pedigree import (
 )
 
 # ---------------------------------------------------------------------------
-# Optional: single CSV at import (PEDIGREE_CSV_PATH) for tests / simple deploy.
-# When unset, the app uses datasets.dogs_for_request (cookie: full + fixtures).
+# PEDIGREE_CSV_PATH (optional): overrides which file backs registry key "full"
+# only; see pedigree_app.datasets. Switching datasets never requires a restart.
 # ---------------------------------------------------------------------------
 
 _THIS_DIR = Path(__file__).parent
-_SINGLE_CSV = os.environ.get("PEDIGREE_CSV_PATH")
-if _SINGLE_CSV:
-    _STATIC_DOGS: dict[int, Dog] | None = load_dogs(Path(_SINGLE_CSV))
-else:
-    _STATIC_DOGS = None
 
 app = FastAPI(title="Pedigree Explorer")
 app.mount("/static", StaticFiles(directory=_THIS_DIR / "static"), name="static")
@@ -45,8 +41,6 @@ templates = Jinja2Templates(directory=_THIS_DIR / "templates")
 
 
 def _dogs(request: Request) -> dict[int, Dog]:
-    if _STATIC_DOGS is not None:
-        return _STATIC_DOGS
     return dogs_for_cookie(request.cookies.get(COOKIE_NAME))
 
 
@@ -54,7 +48,7 @@ def _nav(request: Request) -> dict:
     return {
         "dataset_options": DATASET_OPTIONS,
         "current_dataset": selected_key_from_cookie(request.cookies.get(COOKIE_NAME)),
-        "dataset_picker_enabled": _STATIC_DOGS is None,
+        "dataset_picker_enabled": True,
     }
 
 
@@ -119,16 +113,41 @@ def get_pedigree(request: Request, dog_id: int):
     }
 
 
+class DatasetSelectBody(BaseModel):
+    """JSON body for POST /api/dataset."""
+
+    dataset: str = Field(..., min_length=1, max_length=128)
+
+
+@app.get("/api/dataset", tags=["api"])
+def get_dataset_setting(request: Request):
+    """Describe the active data source and available options (cookie-backed)."""
+    return {
+        "switching_enabled": True,
+        "dataset": selected_key_from_cookie(request.cookies.get(COOKIE_NAME)),
+        "options": [{"key": o.key, "label": o.label} for o in DATASET_OPTIONS],
+    }
+
+
+@app.post("/api/dataset", tags=["api"])
+def post_dataset_api(body: DatasetSelectBody):
+    """Select a registered CSV; sets ``pedigree_dataset`` cookie for later API/HTML requests."""
+    key = body.dataset.strip()
+    if key not in dataset_keys():
+        raise HTTPException(status_code=400, detail="Unknown dataset")
+    response = JSONResponse({"ok": True, "dataset": key})
+    apply_pedigree_dataset_cookie(response, key)
+    return response
+
+
 # ---------------------------------------------------------------------------
-# Dataset switcher (HTML only; no-op when PEDIGREE_CSV_PATH locks a single file)
+# Dataset switcher (HTML form; same cookie as POST /api/dataset)
 # ---------------------------------------------------------------------------
 
 
 @app.post("/dataset", response_class=RedirectResponse)
 async def set_dataset(request: Request):
     """Set the pedigree_dataset cookie and redirect back (Referer or home)."""
-    if _STATIC_DOGS is not None:
-        return RedirectResponse(url="/", status_code=303)
     form = await request.form()
     raw = form.get("dataset")
     key = str(raw).strip() if raw is not None else ""
@@ -138,14 +157,7 @@ async def set_dataset(request: Request):
     referer = request.headers.get("referer") or ""
     dest = referer if referer.startswith(base) else "/"
     response = RedirectResponse(url=dest, status_code=303)
-    response.set_cookie(
-        COOKIE_NAME,
-        key,
-        max_age=60 * 60 * 24 * 365,
-        httponly=True,
-        samesite="lax",
-        path="/",
-    )
+    apply_pedigree_dataset_cookie(response, key)
     return response
 
 

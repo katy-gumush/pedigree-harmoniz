@@ -1,6 +1,7 @@
 README.md
 pyproject.toml
 src/pedigree_app/__init__.py
+src/pedigree_app/datasets.py
 src/pedigree_app/load_csv.py
 src/pedigree_app/main.py
 src/pedigree_app/pedigree.py
@@ -9,3 +10,5 @@ src/pedigree_app.egg-info/SOURCES.txt
 src/pedigree_app.egg-info/dependency_links.txt
 src/pedigree_app.egg-info/requires.txt
 src/pedigree_app.egg-info/top_level.txt
+tests/test_load_csv.py
+tests/test_pedigree.py

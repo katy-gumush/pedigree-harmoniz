@@ -20,9 +20,8 @@ import static org.junit.jupiter.api.Assertions.*;
  * no self-parenting, no directed cycle in parent links (any length, DFS),
  * and non-negative measurements.
  *
- * <p>Fixtures under {@code /fixtures/} are small CSVs (few rows each) produced by
- * {@code scripts/generate_corrupted_datasets.py}: clean, bad parent id, duplicate id,
- * immediate two-node cycle, and a three-node sire-only cycle.
+ * <p>Fixtures under {@code /fixtures/} are produced by {@code scripts/generate_corrupted_datasets.py}:
+ * {@code clean.csv} is a full copy of the baseline dataset; corrupt files are minimal (one issue each).
  */
 @Tag("data")
 class PedigreeCsvIntegrityTest {

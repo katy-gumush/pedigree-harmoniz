@@ -1,9 +1,9 @@
-"""Write minimal CSV fixtures for pedigree integrity tests.
+"""Write pedigree CSV fixtures for integrity tests.
 
 Outputs to java-tests/src/test/resources/fixtures/:
 
   clean.csv
-      Three dogs: two founders and one valid child (sire 1, dam 2).
+      Full copy of the repo baseline ``Dogs Pedigree.csv`` (all dogs).
 
   corrupt_bad_parent_id.csv
       Child lists Sire_ID=9999 (non-existent).
@@ -17,18 +17,27 @@ Outputs to java-tests/src/test/resources/fixtures/:
   corrupt_long_cycle.csv
       Sire-only ring 1→2→3→1 (three-node cycle).
 
-These files are small on purpose: data tests assert one failing rule per corrupt
-file without scanning hundreds of rows.
+Corrupt fixtures stay small (one issue each). ``clean.csv`` is the full dataset
+so ``cleanCsvPassesAll`` exercises the same row count as production.
 """
 
 from __future__ import annotations
 
 import csv
+import shutil
 from pathlib import Path
 
+BASELINE = Path(__file__).parent.parent / "Dogs Pedigree.csv"
 OUTPUT_DIR = Path(__file__).parent.parent / "java-tests/src/test/resources/fixtures"
 
 FIELDNAMES = ["ID", "Name", "Breed", "Sex", "Height_cm", "Weight_kg", "Sire_ID", "Dam_ID"]
+
+
+def _copy_clean() -> None:
+    dest = OUTPUT_DIR / "clean.csv"
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(BASELINE, dest)
+    print(f"  copied baseline → {dest} ({BASELINE.name})")
 
 
 def _write(path: Path, rows: list[dict]) -> None:
@@ -41,16 +50,10 @@ def _write(path: Path, rows: list[dict]) -> None:
 
 
 def main() -> None:
-    print(f"Generating minimal fixtures in: {OUTPUT_DIR}\n")
+    print(f"Reading baseline: {BASELINE}")
+    print(f"Generating fixtures in: {OUTPUT_DIR}\n")
 
-    _write(
-        OUTPUT_DIR / "clean.csv",
-        [
-            {"ID": "1", "Name": "Alpha", "Breed": "Mixed", "Sex": "M", "Height_cm": "50.0", "Weight_kg": "20.0", "Sire_ID": "", "Dam_ID": ""},
-            {"ID": "2", "Name": "Bravo", "Breed": "Mixed", "Sex": "F", "Height_cm": "48.0", "Weight_kg": "18.0", "Sire_ID": "", "Dam_ID": ""},
-            {"ID": "3", "Name": "Charlie", "Breed": "Mixed", "Sex": "M", "Height_cm": "45.0", "Weight_kg": "15.0", "Sire_ID": "1", "Dam_ID": "2"},
-        ],
-    )
+    _copy_clean()
     _write(
         OUTPUT_DIR / "corrupt_bad_parent_id.csv",
         [

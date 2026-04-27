@@ -15,14 +15,18 @@ pedigree/
     templates/                   HTML pages with data-testid attributes
     static/                      CSS
   scripts/
-    generate_corrupted_datasets.py   writes minimal CSV fixtures (few rows each)
+    generate_corrupted_datasets.py   copies baseline to clean.csv; writes small corrupt fixtures
+  tests/
+    test_load_csv.py, test_pedigree.py   pytest unit tests for `pedigree_app` (CSV + pedigree logic)
+  databricks/
+    run_unit_tests.py              Databricks notebook source: `%pip` + pytest on `tests/` (Repos)
   java-tests/
     pom.xml                      Maven project (JUnit 5 + Commons CSV + REST Assured + Playwright)
     src/test/java/com/pedigree/
       data/PedigreeCsvIntegrityTest.java    data-layer tests
       api/PedigreeApiTest.java              API-layer tests
       ui/PedigreeUiTest.java                UI-layer Playwright tests
-    src/test/resources/fixtures/   clean + corrupted minimal CSV fixtures (generated)
+    src/test/resources/fixtures/   clean (full baseline) + minimal corrupt CSVs (generated)
   TESTING.md                     test strategy and error scenario explanations
 ```
 
@@ -50,7 +54,7 @@ uv pip install -e .              # installs fastapi, uvicorn, jinja2, etc.
 .venv/bin/python scripts/generate_corrupted_datasets.py
 ```
 
-This writes `clean.csv` plus four small corrupted variants into `java-tests/src/test/resources/fixtures/` (each file is only a handful of rows, one issue per corrupt file).
+This copies `Dogs Pedigree.csv` to `clean.csv` and writes four small corrupted variants into `java-tests/src/test/resources/fixtures/` (one issue per corrupt file).
 
 ### 3 — Start the application
 
@@ -60,9 +64,12 @@ PYTHONPATH=src .venv/bin/uvicorn pedigree_app.main:app --reload
 
 The app listens on `http://127.0.0.1:8000` by default.
 
-**Switching data in the UI:** With no `PEDIGREE_CSV_PATH`, the navbar **Data source** dropdown loads the full `Dogs Pedigree.csv` or any minimal fixture (clean, bad parent, duplicate id, cycles). The choice applies to both HTML pages and `/api/*` on the same origin (cookie-backed).
+**Switching data:** The navbar **Data source** dropdown and **`POST /api/dataset`**
+(JSON `{"dataset":"<key>"}`) set the same cookie—no restart. Registry includes the
+primary CSV (`full`), baseline copy (`clean`), and minimal corrupt fixtures.
 
-To lock the server to a single CSV (CI, API/UI tests against the full file, or no picker):
+Optional **`PEDIGREE_CSV_PATH`** overrides which file backs the **`full`** key only
+(CI path to the baseline); you can still switch to fixtures via UI or API.
 
 ```bash
 PEDIGREE_CSV_PATH=/absolute/path/to/Dogs\ Pedigree.csv \
@@ -82,7 +89,16 @@ JAVA_HOME=$(/usr/libexec/java_home -v 21) \
 
 ### 5 — Run all tests
 
-With the app running on port 8000:
+**Python (pytest)** — from the repo root, no running app required:
+
+```bash
+uv pip install -e ".[dev]"
+pytest
+```
+
+On **Databricks**, clone this repo as a [Repo](https://docs.databricks.com/aws/en/repos/git-operations-with-repos), open `databricks/run_unit_tests.py` as a notebook, attach a cluster, and run all cells (see [unit testing for notebooks](https://docs.databricks.com/aws/en/notebooks/testing)).
+
+**Java** — with the app running on port 8000:
 
 ```bash
 cd java-tests
@@ -93,7 +109,7 @@ Expected output:
 
 ```
 Tests run: 4,  Failures: 0  -- com.pedigree.data.PedigreeCsvIntegrityTest
-Tests run: 15, Failures: 0  -- com.pedigree.api.PedigreeApiTest
+Tests run: 19, Failures: 0  -- com.pedigree.api.PedigreeApiTest
 Tests run: 11, Failures: 0  -- com.pedigree.ui.PedigreeUiTest
 BUILD SUCCESS
 ```
@@ -127,6 +143,9 @@ mvn test -Dbase.url=http://127.0.0.1:9000
 | GET | `/api/dogs` | JSON list of all dogs |
 | GET | `/api/dogs/{id}` | JSON single dog |
 | GET | `/api/dogs/{id}/pedigree` | JSON ancestors + descendants, depth ≤ 5 |
+| GET | `/api/dogs/{id}/pedigree-network` | JSON nodes + edges for a local tree window |
+| GET | `/api/dataset` | JSON: `switching_enabled` (always true), current cookie key, `{key,label}` options |
+| POST | `/api/dataset` | JSON body `{"dataset":"<registry_key>"}`; sets `pedigree_dataset` cookie; returns `{ok, dataset}` |
 | POST | `/dataset` | Form field `dataset` = registry key; sets cookie and redirects (HTML navbar picker) |
 
 Interactive API docs: `http://127.0.0.1:8000/docs`

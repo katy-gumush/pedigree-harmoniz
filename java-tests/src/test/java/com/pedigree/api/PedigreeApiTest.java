@@ -33,10 +33,16 @@ import static org.junit.jupiter.api.Assertions.*;
  *     - Dog 452: Louie – ancestor chain reaches depth 6, so depth cap at 5 is exercised
  *
  * Assumption: the app is already running before this test class executes.
+ *
+ * <p>Dataset API tests (orders 16–19) use {@code GET/POST /api/dataset} (cookie-backed;
+ * no server restart). {@code PEDIGREE_CSV_PATH} only overrides which file backs the
+ * {@code full} registry key; switching among fixtures remains available.
  */
 @Tag("api")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class PedigreeApiTest {
+
+    private static final String COOKIE_PEDIGREE_DATASET = "pedigree_dataset";
 
     private static final int KNOWN_DOG_ID = 51;     // Henry: sire=1, dam=2
     private static final int FOUNDER_DOG_ID = 3;    // Maggie: many descendants, no parents
@@ -361,5 +367,125 @@ class PedigreeApiTest {
             .statusCode(422)
             .contentType(ContentType.JSON)
             .body("detail", notNullValue());
+    }
+
+    // ------------------------------------------------------------------
+    // GET/POST /api/dataset – JSON data source selection (cookie-backed)
+    // ------------------------------------------------------------------
+
+    @Test
+    @Order(16)
+    @DisplayName("GET /api/dataset returns switching_enabled true and consistent JSON shape")
+    void getDatasetSettingShape() {
+        given()
+            .accept(ContentType.JSON)
+        .when()
+            .get("/api/dataset")
+        .then()
+            .statusCode(200)
+            .contentType(ContentType.JSON)
+            .body("switching_enabled", equalTo(true));
+    }
+
+    @Test
+    @Order(17)
+    @DisplayName("GET /api/dataset lists all registry keys")
+    void getDatasetListsOptionsWhenEnabled() {
+        @SuppressWarnings("unchecked")
+        List<Map<String, Object>> options = given()
+            .accept(ContentType.JSON)
+        .when()
+            .get("/api/dataset")
+        .then()
+            .statusCode(200)
+            .body("dataset", notNullValue())
+            .extract()
+            .jsonPath()
+            .getList("options");
+
+        Set<String> keys = options.stream()
+                .map(o -> (String) o.get("key"))
+                .collect(Collectors.toSet());
+        assertTrue(keys.containsAll(Set.of(
+                        "full", "clean", "bad_parent", "duplicate_id", "immediate_loop", "long_cycle")),
+                "options should include all registry keys; got: " + keys);
+    }
+
+    @Test
+    @Order(18)
+    @DisplayName("POST /api/dataset returns 400 for unknown registry key")
+    void postDatasetUnknownKeyReturns400() {
+        given()
+            .accept(ContentType.JSON)
+            .contentType(ContentType.JSON)
+            .body(Map.of("dataset", "no_such_key"))
+        .when()
+            .post("/api/dataset")
+        .then()
+            .statusCode(400)
+            .contentType(ContentType.JSON)
+            .body("detail", equalTo("Unknown dataset"));
+    }
+
+    @Test
+    @Order(19)
+    @DisplayName("POST /api/dataset sets cookie; GET /api/dogs follows selection; full restores baseline size")
+    void postDatasetSetsCookieAndListEndpointFollowsSelection() {
+        Response postBad = given()
+            .accept(ContentType.JSON)
+            .contentType(ContentType.JSON)
+            .body(Map.of("dataset", "bad_parent"))
+        .when()
+            .post("/api/dataset");
+        postBad.then()
+            .statusCode(200)
+            .body("ok", equalTo(true))
+            .body("dataset", equalTo("bad_parent"))
+            .header("Set-Cookie", notNullValue());
+
+        given()
+            .accept(ContentType.JSON)
+            .cookies(postBad.getDetailedCookies())
+        .when()
+            .get("/api/dogs")
+        .then()
+            .statusCode(200)
+            .body("size()", equalTo(3));
+
+        given()
+            .accept(ContentType.JSON)
+            .contentType(ContentType.JSON)
+            .body(Map.of("dataset", "duplicate_id"))
+        .when()
+            .post("/api/dataset")
+        .then()
+            .statusCode(200);
+
+        given()
+            .accept(ContentType.JSON)
+            .cookie(COOKIE_PEDIGREE_DATASET, "duplicate_id")
+        .when()
+            .get("/api/dogs")
+        .then()
+            .statusCode(200)
+            .body("size()", equalTo(1));
+
+        Response postFull = given()
+            .accept(ContentType.JSON)
+            .contentType(ContentType.JSON)
+            .body(Map.of("dataset", "full"))
+        .when()
+            .post("/api/dataset");
+        postFull.then()
+            .statusCode(200);
+
+        given()
+            .accept(ContentType.JSON)
+            .cookies(postFull.getDetailedCookies())
+        .when()
+            .get("/api/dogs")
+        .then()
+            .statusCode(200)
+            .body("size()", greaterThan(500));
     }
 }

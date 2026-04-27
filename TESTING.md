@@ -50,6 +50,9 @@ boundary.
 ### Assumptions
 
 - The app is started before this test class runs (documented in README).
+- `GET/POST /api/dataset` exercises cookie-backed switching (mini fixtures and
+  back to `full`) with no restart. Optional `PEDIGREE_CSV_PATH` only changes which
+  file backs the `full` key; it does not disable switching.
 - "Known dog" golden values are derived directly from `Dogs Pedigree.csv`:
   dog 51 (Henry) has `sire_id=1` and `dam_id=2`; dog 3 (Maggie) is a founder
   with 119+ descendants within 5 generations; dog 452 (Louie) has a 6-level
@@ -60,6 +63,15 @@ boundary.
 Tests call a live server (default `http://127.0.0.1:8000`, overridable via
 `-Dbase.url=...`).  REST Assured uses a **10s connect** and **30s read** socket
 timeout so slow or hung responses fail fast instead of blocking the suite.
+
+- **`GET /api/dataset`** / **`POST /api/dataset`**
+  - **GET** returns `switching_enabled` (**true**), `dataset` (current cookie key),
+    and `options` (`key` + `label` per registry entry).
+  - **POST** JSON `{"dataset":"…"}` validates the key, returns **400** for unknown
+    keys, otherwise **200** with `{ok, dataset}` and `Set-Cookie: pedigree_dataset=…`.
+    Follow-up **`GET /api/dogs`** with that cookie must reflect the chosen file
+    (e.g. `bad_parent` → 3 dogs); selecting `full` again restores a list with **>500**
+    dogs when `full` points at the baseline CSV.
 
 - **`GET /api/dogs`**
   - **200**, `Content-Type: application/json`, body is an array with **more than
@@ -140,15 +152,16 @@ HTML elements that tests rely on are marked with `data-testid`:
 | `pedigree-no-ancestors` | Fallback message when ancestors list is empty |
 | `pedigree-no-descendants` | Fallback message when descendants list is empty |
 | `error-message` | Error display on 404 page |
-| `dataset-select` | Navbar dropdown to switch CSV data source (hidden when `PEDIGREE_CSV_PATH` is set) |
+| `dataset-select` | Navbar dropdown to switch CSV data source |
 
 ---
 
 ## Error scenario details
 
-Fixtures under `java-tests/src/test/resources/fixtures/` are **small** (a few
-rows each) and are written by `scripts/generate_corrupted_datasets.py`.  They
-encode one integrity violation each so data tests stay fast and focused.
+`clean.csv` is a **full** copy of the baseline `Dogs Pedigree.csv` (written by
+`scripts/generate_corrupted_datasets.py`).  The four `corrupt_*.csv` files are
+**small** (few rows each) and encode one integrity violation each so failing-rule
+tests stay explicit and fast.
 
 ### `corrupt_bad_parent_id.csv` — broken parent reference
 
@@ -214,9 +227,8 @@ lineage is wrong without catching the cycle in data tests.
 
 ## UI data source
 
-When the app runs **without** `PEDIGREE_CSV_PATH`, the navbar includes a **Data
-source** control (`data-testid="dataset-select"`). It posts to `/dataset`, sets a
-cookie, and reloads so the HTML UI and JSON API both use the selected file (full
-`Dogs Pedigree.csv` or any of the minimal fixtures).  Setting `PEDIGREE_CSV_PATH`
-disables the picker and locks the server to that single CSV (useful for CI or
-API/UI golden tests against the full dataset).
+The navbar **Data source** control (`data-testid="dataset-select"`) posts to
+`/dataset`, sets a cookie, and reloads so the HTML UI and JSON API both use the
+selected registry entry. Use **`POST /api/dataset`** for the same switch without a
+form. Optional `PEDIGREE_CSV_PATH` overrides which file backs the **`full`** key
+only (e.g. CI path to the baseline CSV); it does not hide the picker or block switching.

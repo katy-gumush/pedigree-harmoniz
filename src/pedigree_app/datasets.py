@@ -1,12 +1,13 @@
 """Registered CSV datasets and per-request selection (cookie).
 
 The UI and API read the active dataset via :func:`dogs_for_cookie` (cookie value from the request).
-Default is the full ``Dogs Pedigree.csv``; optional entries point at small
-fixtures under ``java-tests/src/test/resources/fixtures/`` for manual checks.
+The ``full`` key defaults to ``Dogs Pedigree.csv``; ``PEDIGREE_CSV_PATH`` overrides which file backs
+``full`` only. Other keys (fixtures) and ``POST /api/dataset`` always work without restarting.
 """
 
 from __future__ import annotations
 
+import os
 from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
@@ -20,6 +21,18 @@ COOKIE_NAME = "pedigree_dataset"
 DEFAULT_DATASET_KEY = "full"
 
 
+def apply_pedigree_dataset_cookie(response, key: str) -> None:
+    """Set the ``pedigree_dataset`` cookie on a Starlette/FastAPI response."""
+    response.set_cookie(
+        COOKIE_NAME,
+        key,
+        max_age=60 * 60 * 24 * 365,
+        httponly=True,
+        samesite="lax",
+        path="/",
+    )
+
+
 @dataclass(frozen=True)
 class DatasetOption:
     """One selectable data source shown in the UI."""
@@ -29,16 +42,24 @@ class DatasetOption:
     path: Path
 
 
+def _primary_csv_path() -> Path:
+    override = os.environ.get("PEDIGREE_CSV_PATH")
+    if override:
+        return Path(override).expanduser().resolve()
+    return _REPO_ROOT / "Dogs Pedigree.csv"
+
+
 def _options() -> tuple[DatasetOption, ...]:
+    primary = _primary_csv_path()
     return (
         DatasetOption(
             key="full",
-            label="Full dataset (Dogs Pedigree.csv)",
-            path=_REPO_ROOT / "Dogs Pedigree.csv",
+            label="Full / primary (" + primary.name + ")",
+            path=primary,
         ),
         DatasetOption(
             key="clean",
-            label="Fixture: clean (minimal, valid)",
+            label="Fixture: clean (full baseline copy)",
             path=_FIXTURES_DIR / "clean.csv",
         ),
         DatasetOption(
