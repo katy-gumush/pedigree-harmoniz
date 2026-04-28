@@ -1,3 +1,9 @@
 ID,Name,Breed,Sex,Height_cm,Weight_kg,Sire_ID,Dam_ID
 1,First,Mixed,M,50.0,20.0,,
-1,Duplicate,Mixed,F,48.0,18.0,,
+2,Katy,Boxer,Male,59.3,31.3,,
+3,Maggie,Boxer,Male,59.3,31.3,,
+4,Gracie,Labrador Retriever,Female,59.3,29.1,,
+4,Duplicate,Mixed,F,48.0,18.0,,
+5,Riley,French Bulldog,Male,29.3,12.7,,
+6,Gus,Boxer,Female,54.7,25.7,,
+7,Rosie,French Bulldog,Male,30.4,9.7,,

@@ -51,6 +51,13 @@ uv pip install -e .
 uv pip install -e ".[dev]"
 ```
 
+<<<<<<< HEAD
+=======
+You **do not** need to generate fixtures for a normal checkout: **`fixtures/csv/*.csv`** are **already in the repository** (`clean.csv`, corrupt variants, and small E2E-specific CSVs). The app’s dataset switcher and tests use those files directly.
+
+If **maintainers** change **`Dogs Pedigree.csv`**, update **`fixtures/csv/clean.csv`** and any dependent corrupt or E2E fixtures so tests and the switcher stay consistent.
+
+>>>>>>> cdef907 (done)
 ## Run the server
 
 The app must be a **Python package** on `PYTHONPATH` (the `src` layout). Use either:
@@ -103,6 +110,18 @@ Clone this repo as a [Databricks Repo](https://docs.databricks.com/aws/en/repos/
 
 ## Application endpoints
 
+<<<<<<< HEAD
+=======
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/` | HTML dogs table |
+| GET | `/dogs/{id}` | HTML dog card |
+| GET | `/dogs/{id}/pedigree` | HTML pedigree view |
+| GET | `/api/dogs` | JSON list |
+| GET | `/api/dogs/{id}` | JSON dog |
+| GET | `/api/dogs/{id}/pedigree` | JSON pedigree |
+| GET | `/api/dogs/{id}/pedigree-network` | JSON nodes + edges |
+>>>>>>> cdef907 (done)
 
 | Method | Path                              | Description        |
 | ------ | --------------------------------- | ------------------ |

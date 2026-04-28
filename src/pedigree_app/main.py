@@ -11,10 +11,10 @@ from fastapi.templating import Jinja2Templates
 
 from pedigree_app.datasets import (
     COOKIE_NAME,
-    DATASET_OPTIONS,
     apply_pedigree_dataset_cookie,
     dataset_keys,
     dogs_for_cookie,
+    get_dataset_options,
     selected_key_from_cookie,
 )
 from pedigree_app.load_csv import Dog
@@ -29,8 +29,8 @@ from pedigree_app.pedigree import (
 )
 
 # ---------------------------------------------------------------------------
-# PEDIGREE_CSV_PATH (optional): overrides which file backs registry key "full"
-# only; see pedigree_app.datasets. Switching datasets never requires a restart.
+# PEDIGREE_CSV_PATH (optional): absolute path to the active Dogs CSV; see
+# pedigree_app.datasets.primary_csv_path.
 # ---------------------------------------------------------------------------
 
 _THIS_DIR = Path(__file__).parent
@@ -46,9 +46,9 @@ def _dogs(request: Request) -> dict[int, Dog]:
 
 def _nav(request: Request) -> dict:
     return {
-        "dataset_options": DATASET_OPTIONS,
+        "dataset_options": get_dataset_options(),
         "current_dataset": selected_key_from_cookie(request.cookies.get(COOKIE_NAME)),
-        "dataset_picker_enabled": True,
+        "dataset_picker_enabled": False,
     }
 
 
@@ -121,17 +121,17 @@ class DatasetSelectBody(BaseModel):
 
 @app.get("/api/dataset", tags=["api"])
 def get_dataset_setting(request: Request):
-    """Describe the active data source and available options (cookie-backed)."""
+    """Describe the active CSV path (single dataset; switching disabled)."""
     return {
-        "switching_enabled": True,
+        "switching_enabled": False,
         "dataset": selected_key_from_cookie(request.cookies.get(COOKIE_NAME)),
-        "options": [{"key": o.key, "label": o.label} for o in DATASET_OPTIONS],
+        "options": [{"key": o.key, "label": o.label} for o in get_dataset_options()],
     }
 
 
 @app.post("/api/dataset", tags=["api"])
 def post_dataset_api(body: DatasetSelectBody):
-    """Select a registered CSV; sets ``pedigree_dataset`` cookie for later API/HTML requests."""
+    """Legacy endpoint — only ``full`` is valid; CSV path is ``PEDIGREE_CSV_PATH``."""
     key = body.dataset.strip()
     if key not in dataset_keys():
         raise HTTPException(status_code=400, detail="Unknown dataset")

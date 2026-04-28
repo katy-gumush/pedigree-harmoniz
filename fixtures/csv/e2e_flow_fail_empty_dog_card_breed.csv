@@ -1,0 +1,4 @@
+ID,Name,Breed,Sex,Height_cm,Weight_kg,Sire_ID,Dam_ID
+1,SireDog,Boxer,Male,50,20,,
+2,DamDog,Poodle,Female,45,18,,
+3,ChildEmptyBreed,,Male,40,15,1,2

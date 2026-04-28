@@ -1,4 +1,6 @@
 ID,Name,Breed,Sex,Height_cm,Weight_kg,Sire_ID,Dam_ID
-1,Gracie,Mixed,F,50.0,20.0,2,
-2,Riley,Mixed,M,48.0,18.0,3,
-3,Gus,Mixed,M,45.0,15.0,1,
+1,One,Mixed,M,50.0,20.0,2,
+2,Two,Mixed,M,49.0,19.0,3,
+3,Three,Mixed,M,48.0,18.0,4,
+4,Four,Mixed,M,47.0,17.0,5,
+5,Five,Mixed,M,46.0,16.0,1,

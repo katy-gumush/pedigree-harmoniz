@@ -1,1 +1,1 @@
-# Makes ``tests`` a package so helpers can use ``from tests.dataset_validation import ...``.
+# Package marker for the ``tests`` tree (shared imports / helpers if added later).

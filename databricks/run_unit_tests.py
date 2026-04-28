@@ -4,6 +4,10 @@
 #
 # Usage: open this file as a notebook in a Databricks Repo cloned from this
 # repository, attach a cluster, run all cells.
+#
+# CSV path: pytest sets PEDIGREE_CSV_PATH from PEDIGREE_TEST_CSV or --pedigree-csv,
+# default fixtures/csv/clean.csv. Example red demo before pytest:
+#   os.environ["PEDIGREE_TEST_CSV"] = str(root / "fixtures/csv/corrupt_immediate_loop.csv")
 # MAGIC %pip install pytest httpx
 # COMMAND ----------
 import os

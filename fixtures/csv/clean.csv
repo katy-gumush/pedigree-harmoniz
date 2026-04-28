@@ -581,3 +581,8 @@ ID,Name,Breed,Sex,Height_cm,Weight_kg,Sire_ID,Dam_ID
 580,Milo,Mixed,Female,31.8,7.6,174,449
 581,Rosie,Mixed,Female,31,9,176,449
 582,Moose,Mixed,Male,33.5,8.9,174,449
+583,Scout,Labrador Retriever,Male,55,22,1,2
+584,Minnie,Beagle,Female,32,9.5,31,32
+585,Annie,Boxer,Female,56,24,3,4
+586,Remy,Poodle,Male,44,16,12,18
+587,Boone,Mixed,Male,45,20,51,52
