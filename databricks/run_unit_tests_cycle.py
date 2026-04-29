@@ -8,18 +8,25 @@
 # CSV path: pytest sets PEDIGREE_CSV_PATH from PEDIGREE_TEST_CSV or --pedigree-csv,
 # default fixtures/csv/clean.csv. Example red demo before pytest:
 #   os.environ["PEDIGREE_TEST_CSV"] = str(root / "fixtures/csv/corrupt_immediate_loop.csv")
-# MAGIC %pip install pytest httpx
-# MAGIC %pip install fastapi
-# MAGIC %pip install --upgrade typing_extensions
-# MAGIC %pip uninstall -y fastapi pydantic pydantic-core typing_extensions
-# MAGIC %pip install fastapi uvicorn jinja2 httpx pytest
-# MAGIC %pip install jinja2
-# MAGIC %pip install "typing_extensions==4.10.0" "pydantic==1.10.15" "fastapi==0.95.2" "starlette==0.27.0" "httpx==0.24.1"
-# MAGIC dbutils.library.restartPython()
+%pip install pytest httpx
+%pip install fastapi
+%pip install --upgrade typing_extensions
+%pip uninstall -y fastapi pydantic pydantic-core typing_extensions
+%pip install fastapi uvicorn jinja2 httpx pytest
+%pip install jinja2
+%pip install "typing_extensions==4.10.0" "pydantic==1.10.15" "fastapi==0.95.2" "starlette==0.27.0" "httpx==0.24.1"
+dbutils.library.restartPython()
 
 # COMMAND ----------
+
+
 import os
-import sy
+os.environ["PEDIGREE_TEST_CSV"] = str(root / "fixtures" / "csv" / "corrupt_long_cycle.csv")
+
+# COMMAND ----------
+
+import os
+import sys
 from pathlib import Path
 import pytest
 
