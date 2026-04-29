@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # Pedigree Explorer
 
 A small web application that exposes a dogs pedigree dataset as a REST API and HTML UI, with automated tests in **Python only** (data, API, UI). For **how tests are organized, how corrupt data is handled, and how to talk about it in an interview**, see [TESTING.md](TESTING.md).
