@@ -59,3 +59,10 @@ retcode = pytest.main([
 
 print("Pytest return code:", retcode)
 assert retcode == 0, "The pytest invocation failed. See the log for details."
+
+
+# COMMAND ----------
+os.environ["PEDIGREE_TEST_CSV"] = str(root / "fixtures" / "csv" / "corrupt_long_cycle.csv")
+
+# COMMAND ----------
+os.environ["PEDIGREE_TEST_CSV"] = str(root / "fixtures" / "csv" / "corrupt_duplicate_id.csv")
